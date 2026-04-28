@@ -130,7 +130,7 @@ export default function Footer() {
             <ul className="space-y-3 md:space-y-4 text-sm md:text-base">
               <li className="flex items-start gap-3 text-slate-400">
                 <FaMapMarkerAlt className="text-yellow-500 mt-1 shrink-0" />
-                <span>سوريا، مصياف، شمال الكازية الشمالية 150 متر</span>
+                <span>سوريا، مصياف، شمال الكازية الشمالية 200 متر</span>
               </li>
               <li className="flex items-center gap-3 text-slate-400">
                 <FaPhoneAlt className="text-yellow-500 shrink-0" />
