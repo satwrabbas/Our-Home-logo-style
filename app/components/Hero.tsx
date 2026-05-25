@@ -26,7 +26,7 @@ export default async function Hero() {
 
         <div className="relative z-20 text-center max-w-4xl px-4">
           <h1 className="text-3xl sm:text-4xl md:text-7xl font-bold mb-4 md:mb-6 text-transparent bg-clip-text bg-linear-to-r from-white to-gray-400">
-            نبني رؤيتك.. حجراً تلو الآخر
+            نبني أحلامك حجراً تلو الآخر بيتنا بيتك 
           </h1>
 
           <p className="text-base sm:text-lg md:text-xl text-text-muted mb-6 md:mb-8 leading-relaxed">
