@@ -39,7 +39,7 @@ export default async function Hero() {
               href="/contact"
               className="w-full sm:w-auto px-6 py-2 md:px-8 md:py-3 bg-primary hover:bg-blue-600 rounded-full font-bold transition text-sm md:text-base"
             >
-              احجز استشارة
+              تواصل معنا 
             </Link>
             <Link
               href="/portfolio"
@@ -55,7 +55,7 @@ export default async function Hero() {
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex justify-between items-end mb-8 md:mb-12">
             <h2 className="text-xl md:text-3xl font-bold border-r-4 border-accent pr-3 md:pr-4">
-              آخر مشاريعنا
+              من أعمالنا 
             </h2>
             <Link
               href="/portfolio"
