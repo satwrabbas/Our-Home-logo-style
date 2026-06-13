@@ -1,3 +1,4 @@
+//app\auth\signout\route.ts
 import { createClient } from '../../utils/supabase/server'
 import { redirect } from 'next/navigation'
 

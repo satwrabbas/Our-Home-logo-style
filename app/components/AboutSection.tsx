@@ -1,3 +1,4 @@
+//app\components\AboutSection.tsx
 import Image from "next/image";
 import {
   FaRulerCombined,

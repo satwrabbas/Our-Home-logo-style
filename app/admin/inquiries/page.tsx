@@ -1,3 +1,4 @@
+//app\admin\inquiries\page.tsx
 import { createClient } from "../../utils/supabase/server";
 import { deleteInquiry, markAsContacted } from "../actions";
 import { FaWhatsapp, FaTrash, FaCheckDouble, FaClock } from "react-icons/fa";

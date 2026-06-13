@@ -1,3 +1,4 @@
+//app\components\ImageGallery.tsx
 "use client";
 
 import { useState, useEffect, useCallback } from "react";

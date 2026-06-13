@@ -1,3 +1,4 @@
+//app\admin\testimonials\page.tsx
 import { createClient } from "../../utils/supabase/server";
 import { addTestimonial, deleteTestimonial } from "./actions";
 import { FaTrash, FaStar, FaPlus, FaImage } from "react-icons/fa";

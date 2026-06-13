@@ -1,3 +1,4 @@
+//app\components\Hero.tsx
 import { createClient } from "../utils/supabase/server";
 import Link from "next/link";
 import {

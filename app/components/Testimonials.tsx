@@ -1,3 +1,4 @@
+//app\components\Testimonials.tsx
 import { createClient } from "../utils/supabase/server";
 import { FaQuoteRight, FaStar } from "react-icons/fa";
 import Image from "next/image";

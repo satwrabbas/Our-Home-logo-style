@@ -1,3 +1,4 @@
+//app\admin\projects\[id]\edit\page.tsx
 "use client";
 
 import { useState, useEffect, use } from "react";
