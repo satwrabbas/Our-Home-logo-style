@@ -12,22 +12,27 @@ export default function AboutSection() {
     {
       icon: <FaRulerCombined />,
       title: "دقة هندسية",
-      desc: "تصاميم تراعي أدق التفاصيل وتستغل كل سنتيمتر.",
+      desc: "تصاميم تراعي أدق التفاصيل وتستغل كامل المساحات.",
     },
     {
       icon: <FaHandshake />,
       title: "شفافية مطلقة",
-      desc: "عقود واضحة، جداول زمنية دقيقة، وتقارير دورية.",
+      desc: "عقود واضحة، جداول زمنية دقيقة، و كشفوف حساب دورية.",
     },
     {
       icon: <FaLightbulb />,
       title: "حلول إبداعية",
-      desc: "أفكار إكساء عصرية تناسب ميزانيتك وتواكب الموضة.",
+      desc: "أفكار إنشاء و إكساء و إدخار تناسب ميزانيتك وتواكب الحداثة.",
     },
     {
       icon: <FaUserTie />,
       title: "إشراف مباشر",
-      desc: "مهندسون مختصون في الموقع لضمان الجودة.",
+      desc: "مهندسون متخصصون في الموقع لضمان الجودة.",
+    },
+    {
+      icon: <FaUserTie />,
+      title: " ",
+      desc: "مهندسون متخصصون في الموقع لضمان الجودة.",
     },
   ];
 
@@ -48,22 +53,19 @@ export default function AboutSection() {
               </h4>
               <h2 className="text-2xl md:text-5xl font-bold text-white leading-tight">
                 أكثر من مجرد مكتب هندسي.. <br />
-                <span className="text-blue-500">نحن شركاء طموحك</span>
+                <span className="text-blue-500">نحن فريق عمل متكامل و شركاء طموحك</span>
               </h2>
             </div>
 
             <p className="text-slate-400 text-base md:text-lg leading-relaxed text-justify">
               من قلب مدينة مصياف، انطلق مكتب{" "}
-              <span className="text-white font-bold">Our Home</span> برؤية تهدف
-              للارتقاء بالواقع العمراني. ندرك أن البناء في مناطقنا يتطلب فهماً
-              خاصاً لطبيعة الأرض والمناخ، ولذوق المجتمع المحلي.
+              <span className="text-white font-bold">Our Home</span> كفريق هندسي متكامل من المهندسين المتميزين و الفنيين و المهنيين المهرة لنساعدك على تحقيق رغبتك  بتملك شقة سكنية أو تنفيذ مشروعك بأعلى معايير الجودة و الأمان و الاقتصاد.
             </p>
 
             <p className="text-slate-400 text-base md:text-lg leading-relaxed text-justify">
-              تخصصنا لا يقتصر على صب الخرسانة؛ بل يمتد ليشمل{" "}
-              <span className="text-yellow-500">فنون الإكساء الداخلي</span>، حيث
-              نحول المساحات الصامتة إلى منازل تنبض بالحياة، مع الالتزام الصارم
-              بالميزانية.
+              تخصصنا لا يقتصر على العمل الهندسي؛ بل يصل إلى ادارة الموارد و {" "}
+              <span className="text-yellow-500">الحفاظ على المدخرات بشكل آمن</span>، 
+              من خلال تحويل هذه المدخرات إلى أمتار بدلالة مواد البناء.
             </p>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6 mt-6 md:mt-8">
@@ -100,7 +102,7 @@ export default function AboutSection() {
 
               <div className="absolute bottom-6 right-6 left-6">
                 <p className="text-white font-bold text-base md:text-xl leading-relaxed">
-                  &quot;الجودة ليست صدفة، بل هي نتيجة نية عالية وجهد صادق.&quot;
+                  &quot; بيتنا  Our Home  ولدت في مصياف و عينها على أرجاء الوطن &quot;
                 </p>
                 <p className="text-yellow-500 mt-2 text-xs md:text-sm font-semibold">
                   - إدارة المكتب
@@ -110,7 +112,7 @@ export default function AboutSection() {
 
             <div className="absolute -bottom-4 left-4 md:-bottom-10 md:-left-10 z-20 bg-slate-800 p-4 md:p-6 rounded-2xl shadow-xl border border-white/10 flex items-center gap-3 md:gap-4 max-w-[200px] md:max-w-none">
               <div className="text-3xl md:text-5xl font-bold text-blue-500">
-                15+
+                10+
               </div>
               <div className="text-slate-300 text-xs md:text-sm font-medium leading-snug">
                 مشروع سكني

@@ -1,0 +1,3881 @@
+This file is a merged representation of a subset of the codebase, containing files not matching ignore patterns, combined into a single document by Repomix.
+
+
+
+<file_summary>
+This section contains a summary of this file.
+
+
+  
+  <purpose>
+This file contains a packed representation of a subset of the repository's contents that is considered the most important context.
+It is designed to be easily consumable by AI systems for analysis, code review,
+or other automated processes.
+</purpose>
+  <file_format>
+The content is organized as follows:
+1. This summary section
+2. Repository information
+3. Directory structure
+4. Repository files (if enabled)
+5. Multiple file entries, each consisting of:
+  - File path as an attribute
+  - Full contents of the file
+</file_format>
+  <usage_guidelines>
+- This file should be treated as read-only. Any changes should be made to the
+  original repository files, not this packed version.
+- When processing this file, use the file path to distinguish
+  between different files in the repository.
+- Be aware that this file may contain sensitive information. Handle it with
+  the same level of security as you would the original repository.
+</usage_guidelines>
+  <notes>
+- Some files may have been excluded based on .gitignore rules and Repomix's configuration
+- Binary files are not included in this packed representation. Please refer to the Repository Structure section for a complete list of file paths, including binary files
+- Files matching these patterns are excluded: .next/**, out/**, node_modules/**, public/**, package-lock.json, yarn.lock, pnpm-lock.yaml, bun.lockb, .env*.local, .vercel/**, .turbo/**, coverage/**
+- Files matching patterns in .gitignore are excluded
+- Files matching default ignore patterns are excluded
+- Files are sorted by Git change count (files with more changes are at the bottom)
+</notes>
+</file_summary>
+<directory_structure>
+.gitignore
+app/admin/actions.ts
+app/admin/inquiries/page.tsx
+app/admin/layout.tsx
+app/admin/projects/[id]/edit/page.tsx
+app/admin/projects/action.ts
+app/admin/projects/DeleteButton.tsx
+app/admin/projects/new/page.tsx
+app/admin/projects/page.tsx
+app/admin/testimonials/actions.ts
+app/admin/testimonials/page.tsx
+app/auth/signout/route.ts
+app/components/AboutSection.tsx
+app/components/Footer.tsx
+app/components/Hero.tsx
+app/components/ImageGallery.tsx
+app/components/Navbar.tsx
+app/components/PortfolioGrid.tsx
+app/components/ServicesSection.tsx
+app/components/Testimonials.tsx
+app/contact/page.tsx
+app/globals.css
+app/layout.tsx
+app/loading.tsx
+app/login/actions.ts
+app/login/page.tsx
+app/page.tsx
+app/portfolio/[id]/page.tsx
+app/portfolio/page.tsx
+app/utils/supabase/server.ts
+eslint.config.mjs
+middleware.ts
+next.config.ts
+package.json
+pnpm-workspace.yaml
+postcss.config.mjs
+README.md
+tsconfig.json
+</directory_structure>
+<files>
+This section contains the contents of the repository's files.
+
+
+  
+  <file path=".gitignore">
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# testing
+/coverage
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# env files (can opt-in for committing if needed)
+.env*
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+</file>
+  <file path="pnpm-workspace.yaml">
+allowBuilds:
+  sharp: true
+  unrs-resolver: true
+</file>
+  <file path="postcss.config.mjs">
+const config = {
+  plugins: {
+    "@tailwindcss/postcss": {},
+  },
+};
+
+export default config;
+</file>
+  <file path="app/auth/signout/route.ts">
+//app\auth\signout\route.ts
+import { createClient } from '../../utils/supabase/server'
+import { redirect } from 'next/navigation'
+
+export async function POST(request: Request) {
+  const supabase = await createClient()
+  await supabase.auth.signOut()
+  return redirect('/login')
+}
+</file>
+  <file path="app/components/ImageGallery.tsx">
+//app\components\ImageGallery.tsx
+"use client";
+
+import { useState, useEffect, useCallback } from "react";
+import Image from "next/image";
+import {
+  FaArrowLeft,
+  FaArrowRight,
+  FaTimes,
+  FaExpandArrowsAlt,
+} from "react-icons/fa";
+
+interface ImageGalleryProps {
+  images: string[];
+  title: string;
+}
+
+export default function ImageGallery({ images, title }: ImageGalleryProps) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const openGallery = (index: number) => {
+    setCurrentIndex(index);
+    setIsOpen(true);
+    document.body.style.overflow = "hidden";
+  };
+
+  const closeGallery = () => {
+    setIsOpen(false);
+    document.body.style.overflow = "unset";
+  };
+
+  const nextImage = useCallback(
+    (e?: React.MouseEvent) => {
+      e?.stopPropagation();
+      setCurrentIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
+    },
+    [images.length]
+  );
+
+  const prevImage = useCallback(
+    (e?: React.MouseEvent) => {
+      e?.stopPropagation();
+      setCurrentIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
+    },
+    [images.length]
+  );
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") closeGallery();
+      if (e.key === "ArrowRight") nextImage();
+      if (e.key === "ArrowLeft") prevImage();
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen, nextImage, prevImage]);
+
+  if (images.length === 0) return null;
+
+  return (
+    <>
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {images.map((imgUrl, index) => (
+          
+      
+      <div
+            key={index}
+            onClick={() => openGallery(index)}
+            className="relative h-56 md:h-64 rounded-xl overflow-hidden group cursor-pointer border-2 border-transparent hover:border-yellow-500/70 transition-all duration-300 shadow-sm hover:shadow-yellow-500/10 hover:shadow-lg"
+          >
+        <Image
+              src={imgUrl}
+              alt={`${title} - ${index}`}
+              fill
+              className="object-cover group-hover:scale-105 transition duration-700 ease-in-out"
+            />
+        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <div className="bg-black/60 backdrop-blur-[2px] text-yellow-500 p-3 rounded-full transform scale-75 group-hover:scale-100 transition duration-300 shadow-xl border border-white/10">
+            <FaExpandArrowsAlt size={20} />
+          </div>
+        </div>
+        <div className="absolute inset-x-0 bottom-0 h-1/4 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+        </div>
+      </div>
+        ))}
+      
+    
+    </div>
+
+      {isOpen && (
+        
+    
+    <div
+          className="fixed inset-0 z-50 bg-black/95 backdrop-blur-md flex items-center justify-center p-4"
+          onClick={closeGallery}
+        >
+      <button
+            onClick={closeGallery}
+            className="absolute top-4 right-4 md:top-8 md:right-8 text-white/70 hover:text-white bg-white/10 hover:bg-white/20 p-1.5 md:p-3 rounded-full transition z-50"
+          >
+        <FaTimes className="w-5 h-5 md:w-6 md:h-6" />
+      </button>
+      <button
+            onClick={prevImage}
+            className="absolute left-2 md:left-8 text-white/70 hover:text-yellow-500 bg-black/20 hover:bg-black/50 p-2 md:p-4 rounded-full transition z-50 
+             border border-white/5"
+          >
+        <FaArrowLeft className="w-5 h-5 md:w-6 md:h-6" />
+      </button>
+      <div
+            className="relative w-full h-full max-w-5xl max-h-[85vh] flex items-center justify-center"
+            onClick={(e) => e.stopPropagation()}
+          >
+        <Image
+              src={images[currentIndex]}
+              alt={`Full screen ${currentIndex}`}
+              fill
+              className="object-contain"
+              priority
+              quality={100}
+            />
+        <div className="absolute bottom-[-40px] left-0 right-0 text-center text-white/60 text-sm tracking-widest font-light">
+              {currentIndex + 1} / {images.length}
+            
+        
+        </div>
+      </div>
+      <button
+            onClick={nextImage}
+            className="absolute right-2 md:right-8 text-white/70 hover:text-yellow-500 bg-black/20 hover:bg-black/50 p-2 md:p-4 rounded-full transition z-50  border border-white/5"
+          >
+        <FaArrowRight className="w-5 h-5 md:w-6 md:h-6" />
+      </button>
+    </div>
+      )}
+    
+  
+  </>
+  );
+}
+</file>
+<file path="eslint.config.mjs">
+import { defineConfig, globalIgnores } from "eslint/config";
+import nextVitals from "eslint-config-next/core-web-vitals";
+import nextTs from "eslint-config-next/typescript";
+
+const eslintConfig = defineConfig([
+  ...nextVitals,
+  ...nextTs,
+  
+  globalIgnores([
+    
+    ".next/**",
+    "out/**",
+    "build/**",
+    "next-env.d.ts",
+  ]),
+]);
+
+export default eslintConfig;
+</file>
+<file path="middleware.ts">
+import { createServerClient } from '@supabase/ssr'
+import { NextResponse, type NextRequest } from 'next/server'
+
+export async function middleware(request: NextRequest) {
+  let response = NextResponse.next({
+    request: {
+      headers: request.headers,
+    },
+  })
+
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        getAll() {
+          return request.cookies.getAll()
+        },
+        setAll(cookiesToSet) {
+          cookiesToSet.forEach(({ name, value, options }) => {
+            request.cookies.set(name, value)
+          })
+          response = NextResponse.next({
+            request,
+          })
+          cookiesToSet.forEach(({ name, value, options }) =>
+            response.cookies.set(name, value, options)
+          )
+        },
+      },
+    }
+  )
+
+  const { data: { user } } = await supabase.auth.getUser()
+
+  
+  if (request.nextUrl.pathname.startsWith('/admin') && !user) {
+    return NextResponse.redirect(new URL('/login', request.url))
+  }
+
+  return response
+}
+
+export const config = {
+  matcher: ['/admin/:path*', '/login'],
+}
+</file>
+<file path="app/admin/actions.ts">
+//app\admin\actions.ts
+'use server';
+
+import { createClient } from '../utils/supabase/server';
+import { revalidatePath } from 'next/cache';
+
+
+export async function deleteInquiry(formData: FormData) {
+  const id = formData.get('id');
+  const supabase = await createClient();
+
+  await supabase.from('inquiries').delete().eq('id', id);
+  
+  
+  revalidatePath('/admin/inquiries');
+}
+
+
+export async function markAsContacted(formData: FormData) {
+  const id = formData.get('id');
+  const supabase = await createClient();
+
+  await supabase
+    .from('inquiries')
+    .update({ status: 'contacted' })
+    .eq('id', id);
+
+  revalidatePath('/admin/inquiries');
+}
+
+
+
+export async function deleteProject(formData: FormData) {
+  const id = formData.get('id');
+  const imageUrl = formData.get('image_url') as string;
+  const supabase = await createClient();
+
+  
+  if (imageUrl) {
+    
+    
+    const fileName = imageUrl.split('/').pop(); 
+    
+    if (fileName) {
+      await supabase.storage
+        .from('projects')
+        .remove([fileName]);
+    }
+  }
+
+  
+  const { error } = await supabase
+    .from('projects')
+    .delete()
+    .eq('id', id);
+
+  if (error) {
+    console.error('Error deleting project:', error);
+    return; 
+  }
+
+  
+  revalidatePath('/admin/projects');
+  revalidatePath('/'); 
+  revalidatePath('/portfolio'); 
+}
+</file>
+<file path="app/admin/inquiries/page.tsx">
+//app\admin\inquiries\page.tsx
+import { createClient } from "../../utils/supabase/server";
+import { deleteInquiry, markAsContacted } from "../actions";
+import { FaWhatsapp, FaTrash, FaCheckDouble, FaClock } from "react-icons/fa";
+
+export default async function InquiriesPage() {
+  const supabase = await createClient();
+
+  const { data: inquiries } = await supabase
+    .from("inquiries")
+    .select("*")
+    .order("created_at", { ascending: false });
+
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString("ar-SY", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  };
+
+  return (
+    
+  
+  <div>
+    <header className="flex justify-between items-center mb-8">
+      <h1 className="text-3xl font-bold text-white">صندوق الوارد</h1>
+      <div className="bg-slate-800 px-4 py-2 rounded-full border border-white/10 text-sm text-slate-300">
+          العدد الكلي: {inquiries?.length || 0}
+        
+      
+      </div>
+    </header>
+
+      {!inquiries || inquiries.length === 0 ? (
+        
+    
+    <div className="text-center py-20 bg-slate-900 rounded-2xl border border-white/5 border-dashed">
+      <p className="text-slate-500 text-lg">
+            لا توجد رسائل جديدة حتى الآن.
+          </p>
+    </div>
+      ) : (
+        
+    
+    <div className="grid gap-4">
+          {inquiries.map((item) => (
+            
+      
+      <div
+              key={item.id}
+              className={`relative p-6 rounded-xl border transition-all ${
+                item.status === "new"
+                  ? "bg-slate-800/80 border-yellow-500/50 shadow-[0_0_15px_rgba(234,179,8,0.1)]"
+                  : "bg-slate-900 border-white/5 opacity-75 hover:opacity-100"
+              }`}
+            >
+        <div className="flex flex-col md:flex-row justify-between gap-4">
+          <div className="flex-1">
+            <div className="flex items-center gap-3 mb-2">
+              <h3 className="text-xl font-bold text-white">
+                      {item.name}
+                    </h3>
+                    {item.status === "new" && (
+                      
+              
+              <span className="px-2 py-0.5 bg-yellow-500 text-slate-900 text-xs font-bold rounded-full animate-pulse">
+                        جديد
+                      </span>
+                    )}
+                  
+            
+            </div>
+            <div className="flex items-center gap-4 text-sm text-slate-400 mb-4">
+              <span className="flex items-center gap-1">
+                      {item.phone}
+                    </span>
+              <span className="flex items-center gap-1">
+                <FaClock size={12} />
+                      {formatDate(item.created_at)}
+                    </span>
+            </div>
+            <p className="text-slate-200 bg-slate-950/50 p-4 rounded-lg border border-white/5 leading-relaxed">
+                    {item.message}
+                  </p>
+          </div>
+          <div className="flex md:flex-col gap-2 justify-center border-t md:border-t-0 md:border-r border-white/10 pt-4 md:pt-0 md:pr-4 mt-4 md:mt-0">
+            <a
+                    href={`https://wa.me/${item.phone
+                      ?.replace(/^0+/, "963")
+                      .replace(/\s/g, "")}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-bold transition"
+                  >
+              <FaWhatsapp size={18} />
+              <span>رد واتساب</span>
+            </a>
+
+                  {item.status === "new" && (
+                    
+            
+            <form action={markAsContacted}>
+              <input type="hidden" name="id" value={item.id} />
+              <button
+                        type="submit"
+                        className="w-full flex items-center justify-center gap-2 bg-blue-600/20 hover:bg-blue-600 text-blue-400 hover:text-white px-4 py-2 rounded-lg text-sm font-bold transition border border-blue-600/30"
+                      >
+                <FaCheckDouble />
+                <span>تمت القراءة</span>
+              </button>
+            </form>
+                  )}
+
+                  
+            
+            <form action={deleteInquiry}>
+              <input type="hidden" name="id" value={item.id} />
+              <button
+                      type="submit"
+                      className="w-full flex items-center justify-center gap-2 bg-red-600/10 hover:bg-red-600 text-red-500 hover:text-white px-4 py-2 rounded-lg text-sm font-bold transition border border-red-600/20"
+                    >
+                <FaTrash />
+                <span>حذف</span>
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+          ))}
+        
+    
+    </div>
+      )}
+    
+  
+  </div>
+  );
+}
+</file>
+<file path="app/admin/projects/DeleteButton.tsx">
+//app\admin\projects\DeleteButton.tsx
+"use client";
+
+import { useState } from "react";
+import Swal from "sweetalert2";
+import { FaTrash } from "react-icons/fa";
+import { deleteProject } from "../actions";
+
+interface DeleteButtonProps {
+  id: string;
+  imageUrl: string;
+}
+
+export default function DeleteButton({ id, imageUrl }: DeleteButtonProps) {
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const handleDeleteClick = async () => {
+    const result = await Swal.fire({
+      title: "هل أنت متأكد؟",
+      text: "سيتم حذف المشروع والصورة المرتبطة به نهائياً!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "نعم، احذف",
+      cancelButtonText: "إلغاء",
+      background: "#1e293b",
+      color: "#fff",
+    });
+
+    if (result.isConfirmed) {
+      setIsDeleting(true);
+      try {
+        const formData = new FormData();
+        formData.append("id", id);
+        formData.append("image_url", imageUrl);
+
+        await deleteProject(formData);
+
+        Swal.fire({
+          title: "تم الحذف!",
+          text: "لقد تم حذف المشروع بنجاح.",
+          icon: "success",
+          background: "#1e293b",
+          color: "#fff",
+        });
+      } catch (error) {
+        Swal.fire({
+          title: "خطأ",
+          text: "حدثت مشكلة أثناء الحذف",
+          icon: "error",
+          background: "#1e293b",
+          color: "#fff",
+        });
+      } finally {
+        setIsDeleting(false);
+      }
+    }
+  };
+
+  return (
+    
+  
+  <button
+      onClick={handleDeleteClick}
+      disabled={isDeleting}
+      className="flex items-center gap-1 text-red-500 hover:text-red-400 text-sm px-3 py-1.5 rounded-lg hover:bg-red-500/10 transition disabled:opacity-50"
+    >
+      {isDeleting ? (
+        
+    
+    <span className="animate-pulse">جاري الحذف...</span>
+      ) : (
+        <>
+    <FaTrash size={14} />
+    <span>حذف</span>
+  </>
+      )}
+    
+
+</button>
+  );
+}
+undefined</file>undefinedundefined<file path="app/admin/testimonials/actions.ts">
+//app\admin\testimonials\actions.ts
+'use server';
+
+import { createClient } from '../../utils/supabase/server';
+import { revalidatePath } from 'next/cache';
+
+export async function addTestimonial(formData: FormData) {
+  const supabase = await createClient();
+
+  console.log("--- 1. Starting Upload Process ---");
+
+  
+  const imageFile = formData.get('image') as File;
+  
+  
+  console.log("File Name:", imageFile?.name);
+  console.log("File Size:", imageFile?.size);
+  console.log("File Type:", imageFile?.type);
+
+  let image_url = null;
+
+  if (imageFile && imageFile.size > 0) {
+    console.log("--- 2. File found, attempting upload ---");
+    
+    
+    const fileName = `${Date.now()}-${imageFile.name.replace(/\s/g, '_')}`;
+    
+    
+    
+    
+    const { data: uploadData, error: uploadError } = await supabase.storage
+      .from('testimonials') 
+      .upload(fileName, imageFile, { upsert: false });
+
+    if (uploadError) {
+      console.error("❌ UPLOAD ERROR:", uploadError);
+      console.error("Error Message:", uploadError.message);
+    } else {
+      console.log("✅ Upload Success:", uploadData);
+      
+      const { data: publicData } = supabase.storage
+        .from('testimonials')
+        .getPublicUrl(fileName);
+        
+      image_url = publicData.publicUrl;
+      console.log("🔗 Generated URL:", image_url);
+    }
+  } else {
+    console.log("⚠️ No file detected in formData or file size is 0");
+  }
+
+  
+  const data = {
+    client_name: formData.get('client_name'),
+    role: formData.get('role'),
+    content: formData.get('content'),
+    rating: Number(formData.get('rating')),
+    image_url: image_url,
+  };
+
+  const { error } = await supabase.from('testimonials').insert(data);
+
+  if (!error) {
+    console.log("✅ Database Insert Success");
+    revalidatePath('/admin/testimonials');
+    revalidatePath('/');
+  } else {
+    console.error("❌ Database Error:", error);
+  }
+}
+
+export async function deleteTestimonial(formData: FormData) {
+  const id = formData.get('id');
+  const supabase = await createClient();
+  await supabase.from('testimonials').delete().eq('id', id);
+  revalidatePath('/admin/testimonials');
+  revalidatePath('/');
+}
+undefined</file>undefinedundefined<file path="app/admin/testimonials/page.tsx">
+//app\admin\testimonials\page.tsx
+import { createClient } from "../../utils/supabase/server";
+import { addTestimonial, deleteTestimonial } from "./actions";
+import { FaTrash, FaStar, FaPlus, FaImage } from "react-icons/fa";
+
+export default async function TestimonialsAdmin() {
+  const supabase = await createClient();
+
+  const { data: reviews } = await supabase
+    .from("testimonials")
+    .select("*")
+    .order("created_at", { ascending: false });
+
+  return (
+    
+
+<div className="max-w-4xl mx-auto">
+  <h1 className="text-3xl font-bold text-white mb-8">إدارة آراء العملاء</h1>
+  <div className="bg-slate-900 p-6 rounded-2xl border border-white/10 mb-12">
+    <h2 className="text-xl font-bold text-yellow-500 mb-4 flex items-center gap-2">
+      <FaPlus /> إضافة رأي جديد
+        
+    
+    </h2>
+    <form
+          action={addTestimonial}
+          className="grid grid-cols-1 md:grid-cols-2 gap-4"
+        >
+      <input
+            name="client_name"
+            required
+            placeholder="اسم العميل"
+            className="bg-slate-950 p-3 rounded-lg border border-white/10 text-white focus:border-yellow-500 outline-none"
+          />
+      <input
+            name="role"
+            placeholder="الصفة (مثال: مالك فيلا)"
+            className="bg-slate-950 p-3 rounded-lg border border-white/10 text-white focus:border-yellow-500 outline-none"
+          />
+      <div className="relative group">
+        <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-slate-500">
+          <FaImage />
+        </div>
+        <input
+              type="file"
+              name="image"
+              accept="image/*"
+              className="block w-full text-sm text-slate-400
+                file:mr-4 file:py-3 file:px-4
+                file:rounded-l-lg file:border-0
+                file:text-sm file:font-semibold
+                file:bg-slate-800 file:text-yellow-500
+                hover:file:bg-slate-700
+                bg-slate-950 rounded-lg border border-white/10 cursor-pointer"
+            />
+      </div>
+      <div className="flex gap-4">
+        <select
+              name="rating"
+              className="bg-slate-950 p-3 rounded-lg border border-white/10 text-white focus:border-yellow-500 outline-none w-full"
+            >
+          <option value="5">⭐⭐⭐⭐⭐ (5)</option>
+          <option value="4">⭐⭐⭐⭐ (4)</option>
+          <option value="3">⭐⭐⭐ (3)</option>
+        </select>
+      </div>
+      <textarea
+            name="content"
+            required
+            placeholder="نص الرأي..."
+            rows={3}
+            className="md:col-span-2 bg-slate-950 p-3 rounded-lg border border-white/10 text-white focus:border-yellow-500 outline-none resize-none"
+          />
+      <button
+            type="submit"
+            className="md:col-span-2 bg-yellow-500 hover:bg-yellow-400 text-slate-900 font-bold py-3 rounded-lg transition"
+          >
+            حفظ الرأي
+          
+      
+      </button>
+    </form>
+  </div>
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {reviews?.map((review) => (
+          
+    
+    <div
+            key={review.id}
+            className="bg-slate-800/50 p-6 rounded-xl border border-white/5 relative group"
+          >
+      <div className="flex justify-between items-start mb-4">
+        <div className="flex items-center gap-3">
+                {review.image_url ? (
+                  
+          
+          <img
+                    src={review.image_url}
+                    alt={review.client_name}
+                    className="w-12 h-12 rounded-full object-cover border-2 border-yellow-500/20"
+                  />
+                ) : (
+                  
+          
+          <div className="w-12 h-12 rounded-full bg-blue-600/20 text-blue-500 flex items-center justify-center font-bold text-lg">
+                    {review.client_name.charAt(0)}
+                  </div>
+                )}
+
+                
+          
+          <div>
+            <h3 className="font-bold text-white">{review.client_name}</h3>
+            <p className="text-xs text-slate-400">{review.role}</p>
+          </div>
+        </div>
+        <div className="flex text-yellow-500 text-sm">
+                {[...Array(review.rating)].map((_, i) => (
+                  
+          
+          <FaStar key={i} />
+                ))}
+              
+        
+        </div>
+      </div>
+      <p className="text-slate-300 text-sm leading-relaxed mb-4">
+              &quot;{review.content}&quot;
+            </p>
+      <form
+              action={deleteTestimonial}
+              className="absolute top-4 left-4 opacity-0 group-hover:opacity-100 transition"
+            >
+        <input type="hidden" name="id" value={review.id} />
+        <button
+                type="submit"
+                className="text-red-500 hover:text-red-400 p-2 bg-slate-900 rounded-full hover:bg-red-500/10 transition"
+              >
+          <FaTrash />
+        </button>
+      </form>
+    </div>
+        ))}
+        {(!reviews || reviews.length === 0) && (
+          
+    
+    <p className="text-slate-500 col-span-2 text-center py-10">
+            لا توجد آراء مضافة بعد.
+          </p>
+        )}
+      
+  
+  </div>
+</div>
+  );
+}
+undefined</file>undefinedundefined<file path="app/loading.tsx">
+//app\loading.tsx
+export default function Loading() {
+  return (
+    
+
+<div className="min-h-screen bg-gray-50 pt-20 px-4">
+  <div className="max-w-7xl mx-auto">
+    <div className="h-10 w-64 bg-gray-200 rounded-lg mb-8 animate-pulse">
+    </div>
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {[1, 2, 3, 4, 5, 6].map((i) => (
+            
+      
+      <div
+              key={i}
+              className="bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm h-[400px]"
+            >
+        <div className="h-64 bg-gray-200 animate-pulse">
+        </div>
+        <div className="p-5 space-y-3">
+          <div className="h-4 w-1/3 bg-gray-200 rounded animate-pulse">
+          </div>
+          <div className="h-6 w-3/4 bg-gray-200 rounded animate-pulse">
+          </div>
+          <div className="h-4 w-full bg-gray-200 rounded animate-pulse">
+          </div>
+        </div>
+      </div>
+          ))}
+        
+    
+    </div>
+  </div>
+</div>
+  );
+}
+undefined</file>undefinedundefined<file path="app/utils/supabase/server.ts">
+//app\utils\supabase\server.ts
+import { createServerClient } from '@supabase/ssr'
+import { cookies } from 'next/headers'
+
+export async function createClient() {
+  const cookieStore = await cookies()
+
+  return createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        getAll() {
+          return cookieStore.getAll()
+        },
+        setAll(cookiesToSet) {
+          try {
+            cookiesToSet.forEach(({ name, value, options }) =>
+              cookieStore.set(name, value, options)
+            )
+          } catch {
+            
+            
+            
+          }
+        },
+      },
+    }
+  )
+}
+undefined</file>undefinedundefined<file path="next.config.ts">
+import type { NextConfig } from "next";
+
+const nextConfig: NextConfig ={
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '**.supabase.co', 
+      },
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com', 
+      },
+         {
+        protocol: 'https',
+        hostname: 'images.unsplash.com', 
+        port: '',
+      },
+      {
+        protocol: 'https',
+        hostname: 'unsplash.com', 
+        port: '',
+      },
+    ],
+  },
+};
+
+export default nextConfig;
+undefined</file>undefinedundefined<file path="README.md">
+The last edit in this project
+undefined</file>undefinedundefined<file path="app/admin/projects/action.ts">
+//app\admin\projects\action.ts
+'use server'; 
+
+import { revalidatePath } from 'next/cache';
+
+
+export async function deleteProjectAction(id: string) {
+  try {
+    
+    
+    console.log(`Deleting project with id: ${id}`);
+
+    
+    revalidatePath('/admin/projects'); 
+  } catch (error) {
+    throw new Error('Failed to delete project');
+  }
+}
+undefined</file>undefinedundefined<file path="app/admin/projects/page.tsx">
+//app\admin\projects\page.tsx
+import Link from "next/link";
+import Image from "next/image";
+import { createClient } from "../../utils/supabase/server";
+import { FaPlus, FaTrash, FaMapMarkerAlt, FaEdit } from "react-icons/fa";
+import DeleteButton from './DeleteButton';
+
+export default async function ProjectsDashboard() {
+  
+  const supabase = await createClient();
+
+  const { data: projects } = await supabase
+    .from("projects")
+    .select("*")
+    .order("created_at", { ascending: false });
+
+  return (
+    
+
+<div>
+  <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
+    <div>
+      <h1 className="text-3xl font-bold text-white">إدارة المشاريع</h1>
+      <p className="text-slate-400 mt-1">
+            لديك حالياً{" "}
+            
+        
+        <span className="text-yellow-500 font-bold">
+              {projects?.length || 0}
+            </span>{" "}
+            مشروع في المعرض
+          </p>
+    </div>
+    <Link
+          href="/admin/projects/new"
+          className="flex items-center gap-2 bg-yellow-500 hover:bg-yellow-400 text-slate-900 px-6 py-3 rounded-xl font-bold transition shadow-lg shadow-yellow-500/10"
+        >
+      <FaPlus />
+      <span>إضافة مشروع جديد</span>
+    </Link>
+  </div>
+
+      {!projects || projects.length === 0 ? (
+        
+  
+  <div className="text-center py-24 bg-slate-900/50 rounded-2xl border border-white/5 border-dashed">
+    <p className="text-slate-500 text-lg mb-4">
+            لم تقم بإضافة أي مشاريع بعد.
+          </p>
+    <Link
+            href="/admin/projects/new"
+            className="text-yellow-500 hover:underline"
+          >
+            ابدأ بإضافة مشروعك الأول
+          
+    
+    </Link>
+  </div>
+      ) : (
+        
+  
+  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {projects.map((project) => (
+            
+    
+    <div
+              key={project.id}
+              className="group bg-slate-900 border border-white/5 rounded-xl overflow-hidden hover:border-white/20 transition-all duration-300 flex flex-col"
+            >
+      <div className="relative aspect-video w-full overflow-hidden">
+        <Image
+                  src={project.image_url}
+                  alt={project.title}
+                  fill
+                  className="object-cover group-hover:scale-105 transition duration-500"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                />
+        <div className="absolute top-3 right-3">
+          <span className="px-2 py-1 bg-slate-950/70 backdrop-blur-md text-white text-xs rounded-md border border-white/10">
+                    {project.category}
+                  </span>
+        </div>
+      </div>
+      <div className="p-4 flex-1 flex flex-col">
+        <h3 className="text-lg font-bold text-white mb-2 line-clamp-1">
+                  {project.title}
+                </h3>
+        <div className="flex items-center gap-2 text-slate-500 text-sm mb-4">
+          <FaMapMarkerAlt size={12} />
+          <span className="line-clamp-1">
+                    {project.location || "غير محدد"}
+                  </span>
+        </div>
+        <div className="mt-auto pt-4 border-t border-white/5 flex justify-between items-center">
+          <Link
+                    href={`/portfolio/${project.id}`}
+                    target="_blank"
+                    className="text-sm text-blue-400 hover:text-blue-300 transition"
+                  >
+                    معاينة
+                  
+          
+          </Link>
+          <div className="flex gap-2">
+            <Link
+                      href={`/admin/projects/${project.id}/edit`}
+                      className="flex items-center gap-1 text-yellow-500 hover:text-yellow-400 text-sm px-3 py-1.5 rounded-lg hover:bg-yellow-500/10 transition"
+                    >
+              <FaEdit size={14} />
+              <span>تعديل</span>
+            </Link>
+            <DeleteButton 
+                      id={project.id} 
+                      imageUrl={project.image_url} 
+                    />
+          </div>
+        </div>
+      </div>
+    </div>
+          ))}
+        
+  
+  </div>
+      )}
+    
+
+</div>
+  );
+}
+undefined</file>undefinedundefined<file path="app/components/AboutSection.tsx">
+//app\components\AboutSection.tsx
+import Image from "next/image";
+import {
+  FaRulerCombined,
+  FaHandshake,
+  FaLightbulb,
+  FaUserTie,
+} from "react-icons/fa";
+
+export default function AboutSection() {
+  const features = [
+    {
+      icon: 
+
+<FaRulerCombined />,
+      title: "دقة هندسية",
+      desc: "تصاميم تراعي أدق التفاصيل وتستغل كل سنتيمتر.",
+    },
+    {
+      icon: 
+
+<FaHandshake />,
+      title: "شفافية مطلقة",
+      desc: "عقود واضحة، جداول زمنية دقيقة، وتقارير دورية.",
+    },
+    {
+      icon: 
+
+<FaLightbulb />,
+      title: "حلول إبداعية",
+      desc: "أفكار إكساء عصرية تناسب ميزانيتك وتواكب الموضة.",
+    },
+    {
+      icon: 
+
+<FaUserTie />,
+      title: "إشراف مباشر",
+      desc: "مهندسون مختصون في الموقع لضمان الجودة.",
+    },
+  ];
+
+  return (
+    
+
+<section
+      id="about"
+      className="py-12 md:py-20 bg-slate-950 relative overflow-hidden"
+    >
+  <div className="absolute top-0 right-0 w-1/3 h-1/3 bg-blue-500/5 rounded-full blur-3xl pointer-events-none">
+  </div>
+  <div className="absolute bottom-0 left-0 w-1/3 h-1/3 bg-yellow-500/5 rounded-full blur-3xl pointer-events-none">
+  </div>
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 md:gap-16 items-center">
+      <div className="space-y-6 md:space-y-8 order-2 lg:order-1">
+        <div>
+          <h4 className="text-yellow-500 font-bold tracking-wider uppercase mb-2 text-sm md:text-base">
+                من نحن
+              </h4>
+          <h2 className="text-2xl md:text-5xl font-bold text-white leading-tight">
+                أكثر من مجرد مكتب هندسي.. 
+            
+            <br />
+            <span className="text-blue-500">نحن شركاء طموحك</span>
+          </h2>
+        </div>
+        <p className="text-slate-400 text-base md:text-lg leading-relaxed text-justify">
+              من قلب مدينة مصياف، انطلق مكتب{" "}
+              
+          
+          <span className="text-white font-bold">Our Home</span> برؤية تهدف
+              للارتقاء بالواقع العمراني. ندرك أن البناء في مناطقنا يتطلب فهماً
+              خاصاً لطبيعة الأرض والمناخ، ولذوق المجتمع المحلي.
+            </p>
+        <p className="text-slate-400 text-base md:text-lg leading-relaxed text-justify">
+              تخصصنا لا يقتصر على صب الخرسانة؛ بل يمتد ليشمل{" "}
+              
+          
+          <span className="text-yellow-500">فنون الإكساء الداخلي</span>، حيث
+              نحول المساحات الصامتة إلى منازل تنبض بالحياة، مع الالتزام الصارم
+              بالميزانية.
+            </p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6 mt-6 md:mt-8">
+              {features.map((item, index) => (
+                
+          
+          <div
+                  key={index}
+                  className="flex items-start gap-3 p-3 md:p-4 rounded-xl bg-slate-900 border border-white/5 hover:border-yellow-500/30 transition duration-300 group"
+                >
+            <div className="text-yellow-500 text-xl md:text-2xl mt-1 group-hover:scale-110 transition shrink-0">
+                    {item.icon}
+                  
+            
+            </div>
+            <div>
+              <h5 className="text-white font-bold mb-1 text-sm md:text-base">
+                      {item.title}
+                    </h5>
+              <p className="text-slate-500 text-xs md:text-sm leading-snug">
+                      {item.desc}
+                    </p>
+            </div>
+          </div>
+              ))}
+            
+        
+        </div>
+      </div>
+      <div className="relative order-1 lg:order-2 mb-8 lg:mb-0">
+        <div className="relative z-10 rounded-2xl overflow-hidden shadow-2xl border border-white/10 aspect-[4/5] w-full max-w-md mx-auto lg:max-w-none">
+          <img
+                src="https://images.unsplash.com/photo-1664575602276-acd073f104c1?q=80&w=2070&auto=format&fit=crop"
+                alt="مهندسون في الموقع"
+                className="w-full h-full object-cover hover:scale-105 transition duration-700"
+              />
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/20 to-transparent">
+          </div>
+          <div className="absolute bottom-6 right-6 left-6">
+            <p className="text-white font-bold text-base md:text-xl leading-relaxed">
+                  &quot;الجودة ليست صدفة، بل هي نتيجة نية عالية وجهد صادق.&quot;
+                </p>
+            <p className="text-yellow-500 mt-2 text-xs md:text-sm font-semibold">
+                  - إدارة المكتب
+                </p>
+          </div>
+        </div>
+        <div className="absolute -bottom-4 left-4 md:-bottom-10 md:-left-10 z-20 bg-slate-800 p-4 md:p-6 rounded-2xl shadow-xl border border-white/10 flex items-center gap-3 md:gap-4 max-w-[200px] md:max-w-none">
+          <div className="text-3xl md:text-5xl font-bold text-blue-500">
+                15+
+              
+          
+          </div>
+          <div className="text-slate-300 text-xs md:text-sm font-medium leading-snug">
+                مشروع سكني
+                
+            
+            <br />
+                تم تسليمه
+              
+          
+          </div>
+        </div>
+        <div className="absolute -top-6 -right-6 md:-top-10 md:-right-10 z-0 opacity-20">
+          <svg
+                width="80"
+                height="80"
+                viewBox="0 0 100 100"
+                fill="none"
+                
+            
+            xmlns="http://www.w3.org/2000/svg"
+                className="w-16 h-16 md:w-24 md:h-24"
+              >
+            <pattern
+                  id="dot-pattern"
+                  x="0"
+                  y="0"
+                  width="20"
+                  height="20"
+                  patternUnits="userSpaceOnUse"
+                >
+              <circle
+                    cx="2"
+                    cy="2"
+                    r="2"
+                    className="text-white"
+                    fill="currentColor"
+                  />
+            </pattern>
+            <rect width="100" height="100" fill="url(#dot-pattern)" />
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+  );
+}
+undefined</file>undefinedundefined<file path="app/components/ServicesSection.tsx">
+//app\components\ServicesSection.tsx
+import Link from "next/link";
+import {
+  FaPencilRuler,
+  FaHammer,
+  FaHardHat,
+  FaFileContract,
+  FaCity,
+  FaSearchDollar,
+} from "react-icons/fa";
+
+export default function ServicesSection() {
+  const services = [
+    {
+      id: "01",
+      title: "التصميم المعماري",
+      icon: 
+
+<FaPencilRuler />,
+      description:
+        "تحويل الأفكار إلى مخططات قابلة للتنفيذ، مع مراعاة قوانين البناء واستغلال المساحات بأذكى الطرق.",
+      features: ["مخططات 2D و 3D", "تراخيص البناء", "دراسة الواجهات"],
+    },
+    {
+      id: "02",
+      title: "الإكساء والديكور الداخلي",
+      icon: 
+
+<FaHammer />,
+      description:
+        "نستلم منزلك (على العضم) ونسلمك المفتاح. تصاميم مودرن أو كلاسيك تناسب ذوقك وميزانيتك.",
+      features: ["أسقف مستعارة وإنارة", "أرضيات وسيراميك", "دهانات وديكورات"],
+    },
+    {
+      id: "03",
+      title: "الإشراف الهندسي",
+      icon: 
+
+<FaHardHat />,
+      description:
+        "لا داعي للقلق وملاحقة العمال. مهندسونا يشرفون على كل مرحلة لضمان عدم وجود أخطاء أو هدر.",
+      features: ["إدارة الورشات", "ضبط الجودة", "الالتزام بالوقت"],
+    },
+    {
+      id: "04",
+      title: "الدراسات الإنشائية",
+      icon: 
+
+<FaCity />,
+      description:
+        "حسابات دقيقة للكميات (حديد، إسمنت) لضمان متانة البناء ومقاومته للزلازل بأقل تكلفة ممكنة.",
+      features: ["مذكرات حسابية", "جداول تفريد الحديد", "دراسة التربة"],
+    },
+    {
+      id: "05",
+      title: "ترميم وتجديد المباني",
+      icon: 
+
+<FaFileContract />,
+      description:
+        "إعادة إحياء البيوت القديمة أو الشقق المستعملة وتحديث شبكات المياه والكهرباء لتعود كالجديدة.",
+      features: ["معالجة الرطوبة", "تحديث البنية التحتية", "تعديل التقسيم"],
+    },
+    {
+      id: "06",
+      title: "الاستشارات العقارية",
+      icon: 
+
+<FaSearchDollar />,
+      description:
+        "قبل أن تشتري أو تبني، استشرنا لنقيم لك العقار فنياً ومادياً ونعطيك الرأي الهندسي الصريح.",
+      features: ["تثمين العقارات", "دراسة جدوى", "نصائح استثمارية"],
+    },
+  ];
+
+  return (
+    
+
+<section id="services" className="py-12 md:py-24 bg-slate-900 relative">
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-10 md:mb-16 text-center">
+    <h2 className="text-yellow-500 font-bold tracking-wider uppercase mb-2 text-sm md:text-base">
+          خدماتنا
+        
+    
+    </h2>
+    <h3 className="text-2xl md:text-5xl font-bold text-white leading-tight">
+          حلول هندسية شاملة 
+      
+      <br />
+      <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-600">
+            من الفكرة إلى المفتاح
+          </span></h3>
+  </div>
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-8">
+          {services.map((service) => (
+            
+      
+      <div
+              key={service.id}
+              className="group relative bg-slate-800/50 rounded-2xl p-6 md:p-8 border border-white/5 hover:border-yellow-500/50 transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_10px_30px_rgba(234,179,8,0.1)] overflow-hidden"
+            >
+        <div className="absolute top-0 right-0 text-7xl md:text-9xl font-bold text-white/5 -mr-2 -mt-2 md:-mr-4 md:-mt-4 group-hover:text-yellow-500/10 transition-colors duration-500 select-none">
+                {service.id}
+              
+        
+        </div>
+        <div className="relative z-10 mb-4 md:mb-6 inline-block p-3 md:p-4 rounded-xl bg-slate-900 border border-white/10 text-yellow-500 text-2xl md:text-3xl group-hover:bg-yellow-500 group-hover:text-slate-900 transition-colors duration-300">
+                {service.icon}
+              
+        
+        </div>
+        <div className="relative z-10">
+          <h4 className="text-xl md:text-2xl font-bold text-white mb-2 md:mb-3 group-hover:text-yellow-400 transition-colors">
+                  {service.title}
+                </h4>
+          <p className="text-slate-400 text-sm md:text-base mb-4 md:mb-6 leading-relaxed min-h-0 md:min-h-20">
+                  {service.description}
+                </p>
+          <ul className="space-y-2 border-t border-white/10 pt-4">
+                  {service.features.map((feature, idx) => (
+                    
+            
+            <li
+                      key={idx}
+                      className="flex items-center text-xs md:text-sm text-slate-300"
+                    >
+              <span className="w-1.5 h-1.5 rounded-full bg-blue-500 ml-2 shrink-0"></span>
+                      {feature}
+                    
+            
+            </li>
+                  ))}
+                
+          
+          </ul>
+        </div>
+      </div>
+          ))}
+        
+    
+    </div>
+    <div className="mt-10 md:mt-16 text-center px-2">
+      <p className="text-slate-400 mb-4 md:mb-6 text-sm md:text-base">
+            هل لديك مشروع خاص ولا تجد الخدمة المناسبة هنا؟
+          </p>
+      <Link
+            href="/contact"
+            className="inline-flex items-center justify-center px-6 py-3 md:px-8 md:py-3 border border-transparent text-sm md:text-base font-bold rounded-full text-white bg-blue-600 hover:bg-blue-700 transition-all shadow-lg hover:shadow-blue-600/30 w-full sm:w-auto"
+          >
+            تواصل معنا لمناقشة طلبك
+          
+      
+      </Link>
+    </div>
+  </div>
+</section>
+  );
+}
+undefined</file>undefinedundefined<file path="app/login/actions.ts">
+//app\login\actions.ts
+'use server'
+
+import { revalidatePath } from 'next/cache'
+import { redirect } from 'next/navigation'
+import { createClient } from '../utils/supabase/server'
+
+
+export async function login(prevState: any, formData: FormData) {
+  const supabase = await createClient()
+
+  const email = formData.get('email') as string
+  const password = formData.get('password') as string
+
+  const { error } = await supabase.auth.signInWithPassword({
+    email,
+    password,
+  })
+
+  if (error) {
+    return { error: 'البريد الإلكتروني أو كلمة المرور غير صحيحة' }
+  }
+
+  revalidatePath('/', 'layout')
+  redirect('/admin/projects')
+}
+undefined</file>undefinedundefined<file path="app/admin/layout.tsx">
+//app\admin\layout.tsx
+import Link from "next/link";
+import {
+  FaProjectDiagram,
+  FaEnvelope,
+  FaHome,
+  FaSignOutAlt,
+  FaQuoteRight,
+} from "react-icons/fa";
+
+export default function AdminLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    
+
+<div className="min-h-screen bg-slate-950 flex flex-col md:flex-row">
+  <aside className="w-full md:w-64 bg-slate-900 border-l border-white/5 flex-shrink-0">
+    <div className="p-6 border-b border-white/5">
+      <h2 className="text-xl font-bold text-white">لوحة التحكم
+      
+      </h2>
+      <span className="text-xs text-yellow-500">Our Home Admin</span>
+    </div>
+    <nav className="p-4 space-y-2">
+      <Link
+            href="/admin/projects"
+            className="flex items-center gap-3 px-4 py-3 text-slate-300 hover:bg-white/5 hover:text-white rounded-lg transition"
+          >
+        <FaProjectDiagram />
+        <span>إدارة المشاريع</span>
+      </Link>
+      <Link
+            href="/admin/inquiries"
+            className="flex items-center gap-3 px-4 py-3 text-slate-300 hover:bg-white/5 hover:text-white rounded-lg transition"
+          >
+        <FaEnvelope />
+        <span>رسائل العملاء</span>
+      </Link>
+      <Link
+            href="/admin/testimonials"
+            className="flex items-center gap-3 px-4 py-3 text-slate-300 hover:bg-white/5 hover:text-white rounded-lg transition"
+          >
+        <FaQuoteRight />
+        <span>إدارة الآراء</span>
+      </Link>
+      <Link
+            href="/"
+            className="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-white mt-8 transition"
+          >
+        <FaHome />
+        <span>العودة للموقع</span>
+      </Link>
+      <form action="/auth/signout" method="post">
+        <button
+              type="submit"
+              className="w-full flex items-center gap-3 px-4 py-3 text-red-400 hover:bg-red-500/10 rounded-lg transition mt-4"
+            >
+          <FaSignOutAlt />
+          <span>تسجيل خروج</span>
+        </button>
+      </form>
+    </nav>
+  </aside>
+  <main className="flex-1 p-4 md:p-8 overflow-y-auto">{children}</main>
+</div>
+  );
+}
+undefined</file>undefinedundefined<file path="app/admin/projects/[id]/edit/page.tsx">
+//app\admin\projects\[id]\edit\page.tsx
+"use client";
+
+import { useState, useEffect, use } from "react";
+import { createBrowserClient } from "@supabase/ssr";
+import { useRouter } from "next/navigation";
+import Image from "next/image";
+import {
+  FaSave,
+  FaArrowRight,
+  FaCloudUploadAlt,
+  FaImages,
+  FaTrash,
+} from "react-icons/fa";
+
+export default function EditProjectPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = use(params);
+
+  const router = useRouter();
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+
+  const [formData, setFormData] = useState({
+    title: "",
+    category: "",
+    location: "",
+    description: "",
+    image_url: "",
+    images_gallery: [] as string[],
+  });
+
+  const supabase = createBrowserClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  );
+
+  useEffect(() => {
+    const fetchProject = async () => {
+      const { data, error } = await supabase
+        .from("projects")
+        .select("*")
+        .eq("id", id)
+        .single();
+
+      if (error) {
+        alert("فشل تحميل المشروع، تأكد من الرقم");
+        router.push("/admin/projects");
+      } else if (data) {
+        setFormData({
+          title: data.title,
+          category: data.category,
+          location: data.location || "",
+          description: data.description || "",
+          image_url: data.image_url,
+          images_gallery: data.images_gallery || [],
+        });
+      }
+      setLoading(false);
+    };
+
+    fetchProject();
+  }, [id, supabase, router]);
+
+  const handleUpdate = async (e: React.FormEvent
+
+<HTMLFormElement>) => {
+    e.preventDefault();
+    setSaving(true);
+
+    const formElement = new FormData(e.currentTarget);
+
+    const updates: any = {
+      title: formElement.get("title"),
+      category: formElement.get("category"),
+      location: formElement.get("location"),
+      description: formElement.get("description"),
+    };
+
+    const mainImageFile = formElement.get("new_image") as File;
+    if (mainImageFile && mainImageFile.size > 0) {
+      const fileExt = mainImageFile.name.split(".").pop();
+      const fileName = `main_${Date.now()}_update.${fileExt}`;
+      const { error: upError } = await supabase.storage
+        .from("projects")
+        .upload(fileName, mainImageFile);
+
+      if (!upError) {
+        updates.image_url = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/projects/${fileName}`;
+      }
+    }
+
+    const newGalleryFiles = formElement.getAll("new_gallery") as File[];
+    const validGalleryFiles = newGalleryFiles.filter((f) => f.size > 0);
+
+    const updatedGallery = [...formData.images_gallery];
+
+    if (validGalleryFiles.length > 0) {
+      const uploadPromises = validGalleryFiles.map(async (file) => {
+        const fileName = `gallery_${Date.now()}_${Math.random()}.${file.name
+          .split(".")
+          .pop()}`;
+        const { error } = await supabase.storage
+          .from("projects")
+          .upload(fileName, file);
+        if (!error)
+          return `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/projects/${fileName}`;
+        return null;
+      });
+
+      const newUrls = await Promise.all(uploadPromises);
+      newUrls.forEach((url) => {
+        if (url) updatedGallery.push(url);
+      });
+
+      updates.images_gallery = updatedGallery;
+    }
+
+    const { error } = await supabase
+      .from("projects")
+      .update(updates)
+      .eq("id", id);
+
+    if (error) {
+      alert("حدث خطأ أثناء التحديث");
+      console.error(error);
+    } else {
+      alert("تم تعديل المشروع بنجاح!");
+      router.push("/admin/projects");
+      router.refresh();
+    }
+    setSaving(false);
+  };
+
+  const removeGalleryImage = async (imgUrl: string) => {
+    if (!confirm("هل تريد حذف هذه الصورة من المعرض؟ (سيتم الحفظ فوراً)"))
+      return;
+
+    const newGallery = formData.images_gallery.filter((url) => url !== imgUrl);
+
+    const { error } = await supabase
+      .from("projects")
+      .update({ images_gallery: newGallery })
+      .eq("id", id);
+
+    if (!error) {
+      setFormData((prev) => ({ ...prev, images_gallery: newGallery }));
+    }
+  };
+
+  if (loading)
+    return (
+      
+  
+  <div className="text-white text-center py-20">جاري تحميل البيانات...</div>
+    );
+
+  return (
+    
+  
+  <div className="max-w-4xl mx-auto">
+    <div className="flex items-center gap-4 mb-8">
+      <button
+          onClick={() => router.back()}
+          className="text-slate-400 hover:text-white"
+        >
+        <FaArrowRight size={20} />
+      </button>
+      <h1 className="text-3xl font-bold text-white">
+          تعديل المشروع: {formData.title}
+        </h1>
+    </div>
+    <form
+        onSubmit={handleUpdate}
+        className="space-y-8 bg-slate-900 p-8 rounded-2xl border border-white/10"
+      >
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <label className="block mb-2 text-sm text-slate-300">
+              اسم المشروع
+            </label>
+          <input
+              name="title"
+              defaultValue={formData.title}
+              required
+              className="w-full bg-slate-950 p-3 rounded-lg border border-white/10 text-white focus:border-yellow-500 outline-none"
+            />
+        </div>
+        <div>
+          <label className="block mb-2 text-sm text-slate-300">الموقع</label>
+          <input
+              name="location"
+              defaultValue={formData.location}
+              className="w-full bg-slate-950 p-3 rounded-lg border border-white/10 text-white focus:border-yellow-500 outline-none"
+            />
+        </div>
+      </div>
+      <div>
+        <label className="block mb-2 text-sm text-slate-300">التصنيف</label>
+        <select
+            name="category"
+            defaultValue={formData.category}
+            className="w-full bg-slate-950 p-3 rounded-lg border border-white/10 text-white focus:border-yellow-500 outline-none"
+          >
+          <option value="بناء سكني">بناء سكني</option>
+          <option value="إكساء داخلي">إكساء داخلي</option>
+          <option value="إكساء خارجي">إكساء خارجي</option>
+          <option value="تصميم معماري">تصميم معماري</option>
+          <option value="تجاري">تجاري</option>
+          <option value="ترميم">ترميم</option>
+        </select>
+      </div>
+      <div>
+        <label className="block mb-2 text-sm text-slate-300">الوصف</label>
+        <textarea
+            name="description"
+            defaultValue={formData.description}
+            className="w-full bg-slate-950 p-3 rounded-lg border border-white/10 text-white h-32 focus:border-yellow-500 outline-none"
+          ></textarea>
+      </div>
+      <div className="p-6 border border-white/10 rounded-xl bg-slate-950/30">
+        <label className="block mb-4 text-sm text-yellow-500 font-bold">
+            الصورة الرئيسية الحالية
+          </label>
+        <div className="flex gap-6 items-start">
+          <div className="relative w-32 h-24 rounded-lg overflow-hidden border border-white/20">
+            <Image
+                src={formData.image_url}
+                alt="Current"
+                fill
+                className="object-cover"
+              />
+          </div>
+          <div className="flex-1">
+            <label className="block mb-2 text-sm text-slate-400">
+                تغيير الصورة (اختياري)
+              </label>
+            <input
+                name="new_image"
+                type="file"
+                accept="image/*"
+                className="block w-full text-sm text-slate-400 file:bg-slate-800 file:text-white file:border-0 file:rounded-full file:px-4 file:py-2 hover:file:bg-slate-700 cursor-pointer"
+              />
+          </div>
+        </div>
+      </div>
+      <div className="p-6 border border-white/10 rounded-xl bg-slate-950/30">
+        <label className="block mb-4 text-sm text-blue-400 font-bold">
+            صور المعرض ({formData.images_gallery.length})
+          </label>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+            {formData.images_gallery.map((url, idx) => (
+              
+          
+          <div
+                key={idx}
+                className="relative aspect-square rounded-lg overflow-hidden group border border-white/10"
+              >
+            <Image src={url} alt="gallery" fill className="object-cover" />
+            <button
+                  type="button"
+                  onClick={() => removeGalleryImage(url)}
+                  className="absolute top-1 right-1 bg-red-600/80 text-white p-1.5 rounded-full opacity-0 group-hover:opacity-100 transition"
+                  title="حذف الصورة"
+                >
+              <FaTrash size={12} />
+            </button>
+          </div>
+            ))}
+          
+        
+        </div>
+        <div className="border-t border-white/10 pt-4">
+          <label className="block mb-2 text-sm text-slate-400 flex items-center gap-2">
+            <FaCloudUploadAlt />
+            <span>إضافة صور جديدة للمعرض</span></label>
+          <input
+              name="new_gallery"
+              type="file"
+              multiple
+              accept="image/*"
+              className="block w-full text-sm text-slate-400 file:bg-blue-600/20 file:text-blue-400 file:border-0 file:rounded-full file:px-4 file:py-2 hover:file:bg-blue-600/30 cursor-pointer"
+            />
+        </div>
+      </div>
+      <button
+          disabled={saving}
+          type="submit"
+          className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-4 rounded-xl transition flex justify-center items-center gap-2 shadow-lg disabled:opacity-50"
+        >
+          {saving ? (
+            "جاري الحفظ..."
+          ) : (
+            <>
+        <FaSave />
+        <span>حفظ التعديلات</span>
+      </>
+          )}
+        
+    
+    </button>
+  </form>
+</div>
+  );
+}
+undefined</file>undefinedundefined<file path="app/components/PortfolioGrid.tsx">
+//app\components\PortfolioGrid.tsx
+"use client";
+
+import { useState } from "react";
+import Link from "next/link";
+import Image from "next/image";
+import { FaMapMarkerAlt, FaFilter } from "react-icons/fa";
+
+interface Project {
+  id: number;
+  title: string;
+  category: string;
+  image_url: string;
+  location: string;
+}
+
+interface PortfolioGridProps {
+  projects: Project[];
+}
+
+export default function PortfolioGrid({ projects }: PortfolioGridProps) {
+  const [activeCategory, setActiveCategory] = useState("الكل");
+
+  const categories = [
+    "الكل",
+    ...Array.from(new Set(projects.map((p) => p.category))),
+  ];
+
+  const filteredProjects =
+    activeCategory === "الكل"
+      ? projects
+      : projects.filter((project) => project.category === activeCategory);
+
+  return (
+    
+
+<div className="w-full" >
+  <div className="flex flex-wrap justify-center gap-4 mb-12">
+        {categories.map((category) => (
+          
+    
+    <button
+            key={category}
+            onClick={() => setActiveCategory(category)}
+            className={`px-6 py-2 rounded-full text-sm font-bold transition-all duration-300 border ${
+              activeCategory === category
+                ? "bg-yellow-500 text-slate-900 border-yellow-500 shadow-[0_0_15px_rgba(234,179,8,0.4)] scale-105"
+                : "bg-transparent text-slate-400 border-white/10 hover:border-yellow-500 hover:text-white"
+            }`}
+          >
+            {category}
+          </button>
+        ))}
+      
+  
+  </div>
+  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {filteredProjects.map((project) => (
+          
+    
+    <Link
+            href={`/portfolio/${project.id}`}
+            key={project.id}
+            className="group relative block aspect-4/5 rounded-2xl overflow-hidden bg-slate-900 border border-white/5 shadow-2xl hover:border-yellow-500/50 transition-all duration-500"
+          >
+      <Image
+              src={project.image_url}
+              alt={project.title}
+              fill
+              className="object-cover transition-transform duration-700 group-hover:scale-110"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            />
+      <div className="absolute inset-0 bg-linear-to-t from-slate-950 via-transparent to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
+      <div className="absolute top-4 right-4">
+        <span className="px-3 py-1 text-xs font-bold bg-slate-950/50 backdrop-blur-md text-white border border-white/10 rounded-full">
+                {project.category}
+              </span>
+      </div>
+      <div className="absolute bottom-0 left-0 right-0 p-6 transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
+        <h3 className="text-2xl font-bold text-white mb-2 group-hover:text-yellow-500 transition-colors">
+                {project.title}
+              </h3>
+        <div className="flex items-center justify-between border-t border-white/10 pt-4 mt-2">
+          <div className="flex items-center gap-2 text-slate-400 text-sm">
+            <FaMapMarkerAlt className="text-blue-500" />
+            <span>{project.location || "مصياف"}</span>
+          </div>
+          <span className="text-xs text-white bg-blue-600 px-3 py-1 rounded-full">
+                  عرض التفاصيل
+                </span>
+        </div>
+      </div>
+    </Link>
+        ))}
+      
+  
+  </div>
+
+      {filteredProjects.length === 0 && (
+        
+  
+  <div className="text-center py-20 text-slate-500 border border-dashed border-white/10 rounded-xl">
+    <FaFilter className="mx-auto text-4xl mb-4 opacity-50" />
+    <p>لا توجد مشاريع ضمن هذا التصنيف حالياً.</p>
+  </div>
+      )}
+    
+
+</div>
+  );
+}
+undefined</file>undefinedundefined<file path="app/components/Testimonials.tsx">
+//app\components\Testimonials.tsx
+import { createClient } from "../utils/supabase/server";
+import { FaQuoteRight, FaStar } from "react-icons/fa";
+import Image from "next/image";
+
+export default async function Testimonials() {
+  const supabase = await createClient();
+
+  const { data: reviews } = await supabase
+    .from("testimonials")
+    .select("*")
+    .order("created_at", { ascending: false })
+    .limit(3);
+
+  if (!reviews || reviews.length === 0) return null;
+
+  return (
+    
+
+<section
+      id="testimonials"
+      className="py-12 md:py-24 bg-gradient-to-b from-slate-950 to-slate-900 border-t border-white/10 relative overflow-hidden"
+    >
+  <div className="absolute top-0 left-0 w-64 h-64 bg-blue-600/5 rounded-full blur-3xl translate-x-[-50%] translate-y-[-50%] pointer-events-none">
+  </div>
+  <div className="absolute top-0 left-1/2 w-96 h-1 bg-blue-500/20 blur-xl -translate-x-1/2 pointer-events-none">
+  </div>
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    <div className="text-center mb-10 md:mb-16">
+      <h2 className="text-yellow-500 font-bold tracking-wider uppercase mb-2 text-sm md:text-base">
+            قالوا عنا
+          
+      
+      </h2>
+      <h3 className="text-2xl md:text-5xl font-bold text-white leading-tight">
+            شركاء النجاح{" "}
+            
+        
+        <span className="text-slate-500 block md:inline">
+              وشهادات نعتز بها
+            </span></h3>
+    </div>
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+          {reviews.map((review) => (
+            
+      
+      <div
+              key={review.id}
+              className="relative bg-slate-900/50 p-6 md:p-8 rounded-2xl border border-white/5 hover:border-yellow-500/30 transition duration-300 group"
+            >
+        <div className="absolute top-4 left-4 md:top-6 md:left-6 text-slate-700 text-2xl md:text-4xl opacity-50 group-hover:text-yellow-500/20 transition-colors">
+          <FaQuoteRight />
+        </div>
+        <div className="flex gap-1 mb-4 md:mb-6 text-yellow-500 text-sm md:text-base">
+                {[...Array(review.rating)].map((_, i) => (
+                  
+          
+          <FaStar key={i} />
+                ))}
+              
+        
+        </div>
+        <p className="text-slate-300 text-sm md:text-base mb-6 leading-relaxed relative z-10 min-h-0 md:min-h-[80px]">
+                &quot;{review.content}&quot;
+              </p>
+        <div className="flex items-center gap-3 md:gap-4 border-t border-white/5 pt-4 md:pt-0 md:border-none">
+                {review.image_url ? (
+                  
+          
+          <img
+                    src={review.image_url}
+                    alt={review.client_name}
+                    className="w-12 h-12 md:w-14 md:h-14 rounded-full object-cover border-2 border-blue-500/20 shadow-lg shadow-blue-900/20 shrink-0"
+                  />
+                ) : (
+                  
+          
+          <div className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-gradient-to-tr from-blue-500 to-blue-800 flex items-center justify-center text-white font-bold text-base md:text-lg shadow-lg shadow-blue-900/20 shrink-0">
+                    {review.client_name.charAt(0)}
+                  </div>
+                )}
+
+                
+          
+          <div>
+            <h4 className="text-white font-bold text-sm md:text-base">
+                    {review.client_name}
+                  </h4>
+            <span className="text-xs text-slate-500">{review.role}</span>
+          </div>
+        </div>
+      </div>
+          ))}
+        
+    
+    </div>
+  </div>
+</section>
+  );
+}
+undefined</file>undefinedundefined<file path="app/portfolio/[id]/page.tsx">
+//app\portfolio\[id]\page.tsx
+import { createClient } from "../../utils/supabase/server";
+import { notFound } from "next/navigation";
+import Image from "next/image";
+import Link from "next/link";
+import {
+  FaArrowRight,
+  FaMapMarkerAlt,
+  FaCalendarAlt,
+  FaTag,
+  FaRulerCombined,
+} from "react-icons/fa";
+import Navbar from "../../components/Navbar";
+import Footer from "../../components/Footer";
+
+import ImageGallery from "../../components/ImageGallery";
+
+interface Project {
+  id: number;
+  title: string;
+  description: string;
+  category: string;
+  image_url: string;
+  images_gallery: string[] | null;
+  location: string;
+  completion_date: string;
+  area?: string;
+}
+
+export default async function ProjectDetails({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+
+  const supabase = await createClient();
+  const { data: project, error } = await supabase
+    .from("projects")
+    .select("*")
+    .eq("id", id)
+    .single();
+
+  if (error || !project) {
+    notFound();
+  }
+
+  const galleryImages = project.images_gallery || [];
+
+  return (
+    
+
+<main className="min-h-screen bg-slate-950" id="portfolio">
+  <Navbar />
+  <div className="relative h-[50vh] md:h-[60vh] w-full">
+    <Image
+          src={project.image_url}
+          alt={project.title}
+          fill
+          className="object-cover"
+          priority
+        />
+    <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/60 to-slate-900/30">
+    </div>
+    <div className="absolute bottom-0 left-0 right-0 p-4 pb-8 md:p-16 max-w-7xl mx-auto">
+      <Link
+            href="/portfolio"
+            className="inline-flex items-center gap-2 text-slate-300 hover:text-yellow-500 mb-4 md:mb-6 transition text-sm md:text-base"
+          >
+        <FaArrowRight />
+        <span>العودة للمعرض</span>
+      </Link>
+      <h1 className="text-3xl md:text-6xl font-bold text-white mb-3 md:mb-4 shadow-black drop-shadow-lg leading-tight">
+            {project.title}
+          </h1>
+      <div className="flex items-center gap-2 text-yellow-500 font-bold tracking-wider text-sm md:text-base">
+        <FaTag className="text-sm md:text-base" />
+        <span>{project.category}</span>
+      </div>
+    </div>
+  </div>
+  <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-16">
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
+      <div className="lg:col-span-2 space-y-8">
+        <div>
+          <h2 className="text-xl md:text-2xl font-bold text-white mb-4 md:mb-6 border-r-4 border-yellow-500 pr-3 md:pr-4">
+                تفاصيل المشروع
+              
+          
+          </h2>
+          <p className="text-slate-300 text-base md:text-lg leading-loose whitespace-pre-line text-justify">
+                {project.description || "لا يوجد وصف متاح لهذا المشروع حالياً."}
+              </p>
+        </div>
+        <div className="mt-8 md:mt-12">
+          <h3 className="text-lg md:text-xl font-bold text-white mb-4 md:mb-6">
+                صور من الموقع
+              </h3>
+
+              {galleryImages.length > 0 ? (
+                
+          
+          <ImageGallery images={galleryImages} title={project.title} />
+              ) : (
+                
+          
+          <div className="p-6 md:p-8 bg-slate-900 border border-white/5 rounded-xl text-center text-slate-500 text-sm md:text-base">
+                  جاري رفع المزيد من الصور لهذا المشروع قريباً...
+                </div>
+              )}
+            
+        
+        </div>
+      </div>
+      <div className="lg:col-span-1">
+        <div className="bg-slate-900/80 border border-white/10 rounded-2xl p-6 md:p-8 sticky top-24 backdrop-blur-sm">
+          <h3 className="text-lg md:text-xl font-bold text-white mb-4 md:mb-6">
+                بيانات المشروع
+              </h3>
+          <ul className="space-y-5 md:space-y-6">
+            <li className="flex items-start gap-3 md:gap-4">
+              <div className="p-2.5 md:p-3 bg-blue-600/10 text-blue-500 rounded-lg shrink-0">
+                <FaMapMarkerAlt className="w-4 h-4 md:w-5 md:h-5" />
+              </div>
+              <div>
+                <span className="block text-xs md:text-sm text-slate-500 mb-1">
+                      الموقع
+                    </span>
+                <span className="text-white font-medium text-sm md:text-base">
+                      {project.location || "مصياف"}
+                    </span>
+              </div>
+            </li>
+            <li className="flex items-start gap-3 md:gap-4">
+              <div className="p-2.5 md:p-3 bg-yellow-500/10 text-yellow-500 rounded-lg shrink-0">
+                <FaCalendarAlt className="w-4 h-4 md:w-5 md:h-5" />
+              </div>
+              <div>
+                <span className="block text-xs md:text-sm text-slate-500 mb-1">
+                      تاريخ التسليم
+                    </span>
+                <span className="text-white font-medium text-sm md:text-base">
+                      {project.completion_date || "قيد التنفيذ"}
+                    </span>
+              </div>
+            </li>
+            <li className="flex items-start gap-3 md:gap-4">
+              <div className="p-2.5 md:p-3 bg-green-500/10 text-green-500 rounded-lg shrink-0">
+                <FaRulerCombined className="w-4 h-4 md:w-5 md:h-5" />
+              </div>
+                  {project.area && (
+                    
+              
+              <div>
+                <span className="block text-xs md:text-sm text-slate-500 mb-1">
+                        المساحة التقريبية
+                      </span>
+                <span className="text-white font-medium text-sm md:text-base">
+                        {project.area}
+                      </span>
+              </div>
+                  )}
+                
+            
+            </li>
+          </ul>
+          <div className="mt-6 md:mt-8 pt-6 md:pt-8 border-t border-white/10">
+            <p className="text-slate-400 text-xs md:text-sm mb-3 md:mb-4">
+                  هل أعجبك هذا النمط؟
+                </p>
+            <Link
+                  href="/contact"
+                  className="block w-full py-2.5 md:py-3 bg-blue-600 hover:bg-blue-700 text-white text-center font-bold rounded-lg transition text-sm md:text-base"
+                >
+                  اطلب تصميم مماثل
+                
+            
+            </Link>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <Footer />
+</main>
+  );
+}
+undefined</file>undefinedundefined<file path="app/admin/projects/new/page.tsx">
+//app\admin\projects\new\page.tsx
+"use client";
+
+import { useState } from "react";
+import { createBrowserClient } from "@supabase/ssr";
+import { useRouter } from "next/navigation";
+import {
+  FaCloudUploadAlt,
+  FaImages,
+  FaStar,
+  FaRulerCombined,
+  FaUserTie,
+  FaCalendarAlt,
+} from "react-icons/fa";
+
+export default function NewProject() {
+  const [uploading, setUploading] = useState(false);
+
+  const [progress, setProgress] = useState(0);
+  const [statusMessage, setStatusMessage] = useState("");
+
+  const router = useRouter();
+
+  const handleSubmit = async (e: React.FormEvent
+
+<HTMLFormElement>) => {
+    e.preventDefault();
+    setUploading(true);
+    setProgress(0);
+    setStatusMessage("جاري بدء العملية...");
+
+    const supabase = createBrowserClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    );
+
+    const formData = new FormData(e.currentTarget);
+
+    try {
+      const title = formData.get("title") as string;
+      const slug =
+        title.trim().replace(/\s+/g, "-").toLowerCase() +
+        "-" +
+        Math.floor(Math.random() * 1000);
+
+      const description = formData.get("description") as string;
+      const category = formData.get("category") as string;
+      const location = formData.get("location") as string;
+      const client_name = formData.get("client_name") as string;
+      const area = formData.get("area") as string;
+      const completion_date =
+        (formData.get("completion_date") as string) || null;
+      const status = formData.get("status") as string;
+      const is_featured = formData.get("is_featured") === "on";
+
+      setStatusMessage("جاري رفع الصورة الرئيسية...");
+      const mainImageFile = formData.get("image") as File;
+      let mainImageUrl = "";
+
+      if (!mainImageFile || mainImageFile.size === 0) {
+        throw new Error("يرجى اختيار الصورة الرئيسية للمشروع");
+      }
+
+      const mainFileExt = mainImageFile.name.split(".").pop();
+      const mainFileName = `main_${Date.now()}_${Math.random()}.${mainFileExt}`;
+
+      const { error: mainUploadError } = await supabase.storage
+        .from("projects")
+        .upload(mainFileName, mainImageFile);
+
+      if (mainUploadError) throw mainUploadError;
+
+      mainImageUrl = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/projects/${mainFileName}`;
+
+      setProgress(30);
+
+      const galleryFiles = formData.getAll("gallery") as File[];
+      const validGalleryFiles = galleryFiles.filter((file) => file.size > 0);
+      const galleryUrls: string[] = [];
+
+      if (validGalleryFiles.length > 0) {
+        setStatusMessage(
+          `جاري رفع صور المعرض (0/${validGalleryFiles.length})...`
+        );
+
+        const progressStep = 60 / validGalleryFiles.length;
+        let uploadedCount = 0;
+
+        const uploadPromises = validGalleryFiles.map(async (file) => {
+          const fileExt = file.name.split(".").pop();
+          const fileName = `gallery_${Date.now()}_${Math.random()}.${fileExt}`;
+
+          const { error } = await supabase.storage
+            .from("projects")
+            .upload(fileName, file);
+
+          if (error) return null;
+
+          uploadedCount++;
+          const currentProgress = 30 + uploadedCount * progressStep;
+          setProgress(Math.round(currentProgress));
+          setStatusMessage(
+            `جاري رفع صور المعرض (${uploadedCount}/${validGalleryFiles.length})...`
+          );
+
+          return `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/projects/${fileName}`;
+        });
+
+        const results = await Promise.all(uploadPromises);
+        results.forEach((url) => {
+          if (url) galleryUrls.push(url);
+        });
+      } else {
+        setProgress(90);
+      }
+
+      setStatusMessage("جاري حفظ بيانات المشروع...");
+      const { error: dbError } = await supabase.from("projects").insert({
+        title,
+        slug,
+        description,
+        category,
+        location,
+        client_name,
+        area,
+        completion_date,
+        status,
+        is_featured,
+        image_url: mainImageUrl,
+        images_gallery: galleryUrls,
+      });
+
+      if (dbError) throw dbError;
+
+      setProgress(100);
+      setStatusMessage("تم النشر بنجاح!");
+
+      setTimeout(() => {
+        alert("تم نشر المشروع بنجاح!");
+        router.push("/admin/projects");
+        router.refresh();
+      }, 500);
+    } catch (error: any) {
+      console.error("Error:", error);
+      alert(`حدث خطأ: ${error.message || "فشل في العملية"}`);
+      setUploading(false);
+      setProgress(0);
+      setStatusMessage("");
+    }
+  };
+
+  return (
+    
+  
+  <div className="max-w-4xl mx-auto py-10 px-4">
+    <h1 className="text-3xl font-bold text-white mb-8">إضافة مشروع جديد</h1>
+    <form
+        onSubmit={handleSubmit}
+        className="space-y-8 bg-slate-900 p-8 rounded-2xl border border-white/10 shadow-2xl"
+      >
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="md:col-span-2">
+          <label className="block mb-2 text-sm text-slate-300">
+              اسم المشروع 
+            
+            <span className="text-red-500">*</span></label>
+          <input
+              name="title"
+              type="text"
+              required
+              className="w-full bg-slate-950 p-4 rounded-xl border border-white/10 text-white focus:border-yellow-500 outline-none transition"
+              placeholder="مثال: فيلا الجبل"
+            />
+        </div>
+        <div>
+          <label className="block mb-2 text-sm text-slate-300">الموقع</label>
+          <input
+              name="location"
+              type="text"
+              required
+              className="w-full bg-slate-950 p-4 rounded-xl border border-white/10 text-white focus:border-yellow-500 outline-none"
+              placeholder="مثال: مصياف - الحي الغربي"
+            />
+        </div>
+        <div>
+          <label className="block mb-2 text-sm text-slate-300">التصنيف</label>
+          <select
+              name="category"
+              className="w-full bg-slate-950 p-4 rounded-xl border border-white/10 text-white focus:border-yellow-500 outline-none appearance-none"
+            >
+            <option value="بناء سكني">بناء سكني</option>
+            <option value="إكساء داخلي">إكساء داخلي</option>
+            <option value="إكساء خارجي">إكساء خارجي</option>
+            <option value="تصميم معماري">تصميم معماري</option>
+            <option value="تجاري">تجاري</option>
+            <option value="ترميم">ترميم</option>
+          </select>
+        </div>
+      </div>
+      <div className="bg-slate-950/50 p-6 rounded-xl border border-white/5 grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div>
+          <label className="block mb-2 text-sm text-blue-400 flex items-center gap-2">
+            <FaUserTie /> اسم العميل (اختياري)
+            </label>
+          <input
+              name="client_name"
+              type="text"
+              className="w-full bg-slate-900 p-3 rounded-lg border border-white/10 text-white focus:border-blue-500 outline-none"
+              placeholder="السيد محمد..."
+            />
+        </div>
+        <div>
+          <label className="block mb-2 text-sm text-blue-400 flex items-center gap-2">
+            <FaRulerCombined /> المساحة
+            </label>
+          <input
+              name="area"
+              type="text"
+              className="w-full bg-slate-900 p-3 rounded-lg border border-white/10 text-white focus:border-blue-500 outline-none"
+              placeholder="150 م²"
+            />
+        </div>
+        <div>
+          <label className="block mb-2 text-sm text-blue-400 flex items-center gap-2">
+            <FaCalendarAlt /> تاريخ التسليم
+            </label>
+          <input
+              name="completion_date"
+              type="date"
+              className="w-full bg-slate-900 p-3 rounded-lg border border-white/10 text-white focus:border-blue-500 outline-none"
+            />
+        </div>
+        <div>
+          <label className="block mb-2 text-sm text-slate-300">
+              حالة المشروع
+            </label>
+          <select
+              name="status"
+              className="w-full bg-slate-900 p-3 rounded-lg border border-white/10 text-white focus:border-blue-500 outline-none"
+            >
+            <option value="completed">مكتمل (تم التسليم)</option>
+            <option value="ongoing">قيد الإنشاء (ورشة قائمة)</option>
+          </select>
+        </div>
+        <div className="md:col-span-2 flex items-center p-3 bg-slate-900 rounded-lg border border-white/10">
+          <input
+              type="checkbox"
+              name="is_featured"
+              id="is_featured"
+              className="w-5 h-5 accent-yellow-500 cursor-pointer"
+            />
+          <label
+              htmlFor="is_featured"
+              className="mr-3 text-white cursor-pointer select-none flex items-center gap-2"
+            >
+            <FaStar className="text-yellow-500" />
+            <span>تثبيت في الصفحة الرئيسية (مشروع مميز)</span></label>
+        </div>
+      </div>
+      <div>
+        <label className="block mb-2 text-sm text-slate-300">
+            وصف تفصيلي
+          </label>
+        <textarea
+            name="description"
+            className="w-full bg-slate-950 p-4 rounded-xl border border-white/10 text-white h-40 focus:border-yellow-500 outline-none leading-relaxed"
+            placeholder="اكتب تفاصيل المشروع، المواد المستخدمة، التحديات..."
+          ></textarea>
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="p-6 border-2 border-dashed border-yellow-500/30 rounded-xl bg-slate-950/30 hover:bg-slate-950/50 transition text-center">
+          <FaCloudUploadAlt className="text-4xl text-yellow-500 mx-auto mb-4" />
+          <label className="block mb-2 text-sm font-bold text-white">
+              الصورة الرئيسية (الغلاف)
+            </label>
+          <p className="text-xs text-slate-500 mb-4">
+              ستظهر في واجهة الموقع وبطاقة المشروع
+            </p>
+          <input
+              name="image"
+              type="file"
+              accept="image/*"
+              required
+              className="block w-full text-sm text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-yellow-500 file:text-slate-900 hover:file:bg-yellow-400 cursor-pointer"
+            />
+        </div>
+        <div className="p-6 border-2 border-dashed border-blue-500/30 rounded-xl bg-slate-950/30 hover:bg-slate-950/50 transition text-center">
+          <FaImages className="text-4xl text-blue-500 mx-auto mb-4" />
+          <label className="block mb-2 text-sm font-bold text-white">
+              صور المعرض (متعددة)
+            </label>
+          <p className="text-xs text-slate-500 mb-4">
+              اختر صوراً من زوايا مختلفة (اختياري)
+            </p>
+          <input
+              name="gallery"
+              type="file"
+              accept="image/*"
+              multiple
+              className="block w-full text-sm text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-500 cursor-pointer"
+            />
+        </div>
+      </div>
+      <div className="space-y-3">
+          {uploading && (
+            
+        
+        <div className="w-full bg-slate-950 rounded-full h-4 overflow-hidden border border-white/10 relative">
+          <div
+                className="bg-gradient-to-r from-yellow-500 to-yellow-300 h-full transition-all duration-300 ease-out flex items-center justify-end pr-2"
+                style={{ width: `${progress}%` }}
+              >
+            <span className="text-[10px] font-bold text-slate-900">
+                  {progress}%
+                </span>
+          </div>
+        </div>
+          )}
+
+          
+        
+        <button
+            disabled={uploading}
+            type="submit"
+            className={`w-full font-bold py-5 rounded-xl transition shadow-xl shadow-yellow-500/10 disabled:opacity-50 text-lg flex justify-center items-center gap-2
+              ${
+                uploading
+                  ? "bg-slate-800 text-slate-400 cursor-not-allowed"
+                  : "bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-400 hover:to-yellow-500 text-slate-900"
+              }
+            `}
+          >
+            {uploading ? (
+              <>
+          <svg
+                  className="animate-spin h-5 w-5 text-slate-400"
+                  
+            
+            xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+            <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  ></circle>
+            <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  ></path>
+          </svg>
+          <span>{statusMessage}</span>
+        </>
+            ) : (
+              "نشر المشروع الآن"
+            )}
+          
+      
+      </button>
+    </div>
+  </form>
+</div>
+  );
+}
+undefined</file>undefinedundefined<file path="app/contact/page.tsx">
+//app\contact\page.tsx
+"use client";
+import Link from "next/link";
+import { FaLock } from "react-icons/fa";
+import { useState } from "react";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
+import { createBrowserClient } from "@supabase/ssr";
+import {
+  FaPhoneAlt,
+  FaEnvelope,
+  FaMapMarkerAlt,
+  FaClock,
+  FaPaperPlane,
+} from "react-icons/fa";
+
+export default function ContactPage() {
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent
+
+<HTMLFormElement>) => {
+    e.preventDefault();
+    setLoading(true);
+
+    const formData = new FormData(e.currentTarget);
+    const data = {
+      name: formData.get("name") as string,
+      phone: formData.get("phone") as string,
+      message: formData.get("message") as string,
+    };
+
+    const supabase = createBrowserClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    );
+
+    const { error } = await supabase.from("inquiries").insert(data);
+
+    setLoading(false);
+
+    if (error) {
+      alert("حدث خطأ أثناء الإرسال، يرجى المحاولة لاحقاً.");
+      console.error(error);
+    } else {
+      setSuccess(true);
+      e.currentTarget.reset();
+    }
+  };
+
+  return (
+    
+  
+  <main className="min-h-screen bg-slate-950 flex flex-col">
+    <Navbar />
+    <div className="pt-24 pb-8 md:pt-32 md:pb-12 bg-slate-900 text-center px-4 border-b border-white/5">
+      <h1 className="text-3xl md:text-4xl font-bold text-white mb-3 md:mb-4">
+          تواصل معنا
+        </h1>
+      <p className="text-slate-400 text-sm md:text-base max-w-2xl mx-auto leading-relaxed">
+          نحن هنا للإجابة على استفساراتك الهندسية. سواء كان لديك مشروع جديد أو
+          تحتاج لاستشارة، لا تتردد بالاتصال.
+        </p>
+    </div>
+    <section className="grow py-8 md:py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+        <div className="space-y-6 md:space-y-8 order-2 lg:order-1">
+          <h2 className="text-xl md:text-2xl font-bold text-white border-r-4 border-yellow-500 pr-3 md:pr-4">
+              بيانات التواصل
+            
+          
+          </h2>
+          <div className="grid gap-4 md:gap-6">
+            <div className="flex items-start gap-3 md:gap-4 p-4 md:p-6 bg-slate-900 rounded-xl border border-white/5 hover:border-yellow-500/30 transition group">
+              <div className="bg-blue-600/20 p-2.5 md:p-3 rounded-full text-blue-500 group-hover:bg-blue-600 group-hover:text-white transition shrink-0">
+                <FaPhoneAlt className="w-4 h-4 md:w-5 md:h-5" />
+              </div>
+              <div>
+                <h3 className="text-white font-bold mb-1 text-base">
+                    اتصل بنا
+                  </h3>
+                <div className="flex flex-col text-slate-400 dir-ltr text-right text-sm md:text-base">
+                  <span>+963 944 809 750</span>
+                  <span>+963 994 022 889</span>
+                </div>
+              </div>
+            </div>
+            <div className="flex items-start gap-3 md:gap-4 p-4 md:p-6 bg-slate-900 rounded-xl border border-white/5 hover:border-yellow-500/30 transition group">
+              <div className="bg-pink-600/20 p-2.5 md:p-3 rounded-full text-pink-500 group-hover:bg-pink-600 group-hover:text-white transition shrink-0">
+                <FaEnvelope className="w-4 h-4 md:w-5 md:h-5" />
+              </div>
+              <div>
+                <h3 className="text-white font-bold mb-1 text-base">
+                    البريد الإلكتروني
+                  </h3>
+                <p className="text-slate-400 text-sm md:text-base break-all">
+                    ourhome.msyaf@gmail.com
+                  </p>
+              </div>
+            </div>
+            <div className="flex items-start gap-3 md:gap-4 p-4 md:p-6 bg-slate-900 rounded-xl border border-white/5 hover:border-yellow-500/30 transition group">
+              <div className="bg-yellow-600/20 p-2.5 md:p-3 rounded-full text-yellow-500 group-hover:bg-yellow-600 group-hover:text-white transition shrink-0">
+                <FaMapMarkerAlt className="w-4 h-4 md:w-5 md:h-5" />
+              </div>
+              <div>
+                <h3 className="text-white font-bold mb-1 text-base">
+                    زيارتنا
+                  </h3>
+                <p className="text-slate-400 text-sm md:text-base leading-relaxed">
+                    سوريا، مصياف، شمال الكازية الشمالية ب 150 متر
+                  </p>
+              </div>
+            </div>
+            <div className="flex items-start gap-3 md:gap-4 p-4 md:p-6 bg-slate-900 rounded-xl border border-white/5 hover:border-yellow-500/30 transition group">
+              <div className="bg-green-600/20 p-2.5 md:p-3 rounded-full text-green-500 group-hover:bg-green-600 group-hover:text-white transition shrink-0">
+                <FaClock className="w-4 h-4 md:w-5 md:h-5" />
+              </div>
+              <div>
+                <h3 className="text-white font-bold mb-1 text-base">
+                    أوقات العمل
+                  </h3>
+                <p className="text-slate-400 text-sm md:text-base">
+                    السبت - الخميس: 9:00 ص - 5:00 م
+                  </p>
+                <p className="text-slate-500 text-xs md:text-sm mt-1">
+                    الجمعة: عطلة رسمية
+                  </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="space-y-6 md:space-y-8 order-1 lg:order-2">
+          <div className="bg-slate-900 p-5 md:p-8 rounded-2xl border border-white/10 shadow-xl">
+            <h2 className="text-xl md:text-2xl font-bold text-white mb-4 md:mb-6">
+                أرسل رسالة فورية
+              </h2>
+
+              {success ? (
+                
+            
+            <div className="bg-green-500/10 border border-green-500 text-green-500 p-6 rounded-xl text-center animate-pulse">
+              <h3 className="font-bold text-lg md:text-xl mb-2">
+                    تم الإرسال بنجاح!
+                  </h3>
+              <p className="text-sm md:text-base">
+                    شكراً لتواصلك معنا، سنقوم بالرد عليك في أقرب وقت ممكن.
+                  </p>
+              <button
+                    onClick={() => setSuccess(false)}
+                    className="mt-4 text-sm underline"
+                  >
+                    إرسال رسالة أخرى
+                  
+              
+              </button>
+            </div>
+              ) : (
+                
+            
+            <form
+                  onSubmit={handleSubmit}
+                  className="space-y-4 md:space-y-6"
+                >
+              <div>
+                <label
+                      htmlFor="name"
+                      className="block text-sm font-medium text-slate-400 mb-1.5 md:mb-2"
+                    >
+                      الاسم الكامل
+                    </label>
+                <input
+                      type="text"
+                      name="name"
+                      required
+                      className="w-full bg-slate-950 border border-white/10 rounded-lg p-3 text-base text-white focus:outline-none focus:border-yellow-500 transition placeholder-slate-600"
+                      placeholder="محمد العلي"
+                    />
+              </div>
+              <div>
+                <label
+                      htmlFor="phone"
+                      className="block text-sm font-medium text-slate-400 mb-1.5 md:mb-2"
+                    >
+                      رقم الهاتف (واتساب)
+                    </label>
+                <input
+                      type="tel"
+                      name="phone"
+                      required
+                      className="w-full bg-slate-950 border border-white/10 rounded-lg p-3 text-base text-white focus:outline-none focus:border-yellow-500 transition placeholder-slate-600"
+                      placeholder="09xxxxxxxx"
+                    />
+              </div>
+              <div>
+                <label
+                      htmlFor="message"
+                      className="block text-sm font-medium text-slate-400 mb-1.5 md:mb-2"
+                    >
+                      تفاصيل الاستفسار
+                    </label>
+                <textarea
+                      name="message"
+                      required
+                      rows={4}
+                      className="w-full bg-slate-950 border border-white/10 rounded-lg p-3 text-base text-white focus:outline-none focus:border-yellow-500 transition resize-none placeholder-slate-600"
+                      placeholder="أرغب بالاستفسار عن..."
+                    ></textarea>
+              </div>
+              <button
+                    type="submit"
+                    disabled={loading}
+                    className="w-full bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-bold py-3 md:py-4 rounded-lg transition flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed text-base shadow-lg"
+                  >
+                    {loading ? (
+                      
+                
+                <span>جاري الإرسال...</span>
+                    ) : (
+                      <>
+                <span>إرسال الرسالة</span>
+                <FaPaperPlane className="text-base" />
+              </>
+                    )}
+                  
+            
+            </button>
+          </form>
+              )}
+            
+        
+        </div>
+        <div className="rounded-2xl overflow-hidden border border-white/10 h-[300px] md:h-[450px] shadow-lg relative z-0">
+          <iframe
+                title="موقع المكتب"
+                src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d4285.4664205964045!2d36.33783050962611!3d35.07056459461836!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x15239361bdb9122d%3A0x194d6fc3d2c60ff6!2sOur%20Home!5e1!3m2!1sen!2sus!4v1765527215020!5m2!1sen!2sus"
+                width="100%"
+                height="100%"
+                style={{ border: 0 }}
+                allowFullScreen={true}
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                className="brightness-[0.8] hover:brightness-100 transition duration-500"
+              ></iframe>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div className="py-6 text-center border-t border-white/5 bg-slate-900/30">
+    <Link
+          href="/login"
+          className="inline-flex items-center gap-2 text-slate-700 hover:text-yellow-500 transition-colors duration-300 text-xs md:text-sm opacity-60 hover:opacity-100"
+          title="دخول الإدارة فقط"
+        >
+      <FaLock size={10} className="md:w-3 md:h-3" />
+      <span>الدخول للإدارة</span>
+    </Link>
+  </div>
+  <Footer />
+</main>
+  );
+}
+undefined</file>undefinedundefined<file path="app/globals.css">
+@import "tailwindcss";
+
+@theme {
+  
+  --color-background: #0f172a; 
+  --color-surface: #1e293b;    
+  --color-primary: #3b82f6;    
+  --color-accent: #eab308;     
+  --color-text-main: #f8fafc;  
+  --color-text-muted: #94a3b8; 
+  
+  --font-display: "Tajawal", sans-serif; 
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+
+#home, #about, #services {
+  scroll-margin-top: 90px;
+}
+@layer base {
+    html {
+    scroll-behavior: smooth; 
+  }
+  body {
+    background-color: var(--color-background);
+    color: var(--color-text-main);
+    font-family: var(--font-display);
+    direction: rtl; 
+  }
+}
+
+
+.glass-card {
+  background: rgba(30, 41, 59, 0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+undefined</file>undefinedundefined<file path="app/portfolio/page.tsx">
+//app\portfolio\page.tsx
+import { createClient } from "../utils/supabase/server";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
+import PortfolioGrid from "../components/PortfolioGrid";
+
+export const metadata = {
+  title: "معرض الأعمال | Our Home",
+  description:
+    "تصفح أحدث مشاريعنا الهندسية في مصياف، من التصميم المعماري إلى الإكساء الداخلي.",
+};
+
+export default async function PortfolioPage() {
+  const supabase = await createClient();
+
+  const { data: projects } = await supabase
+    .from("projects")
+    .select("id, title, category, image_url, location")
+    .order("created_at", { ascending: false });
+
+  const allProjects = projects || [];
+
+  return (
+    
+
+<main className="min-h-screen bg-slate-950" >
+  <Navbar />
+  <section className="relative pt-24 pb-10 md:py-24 bg-slate-900 border-b border-white/5">
+    <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-5 pointer-events-none">
+    </div>
+    <div className="max-w-7xl mx-auto px-4 text-center relative z-10">
+      <h1 className="text-3xl md:text-6xl font-bold text-white mb-4 md:mb-6">
+            أعمالنا تتحدث 
+        
+        <span className="text-yellow-500">عنا</span></h1>
+      <p className="text-base md:text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed">
+            جولة بصرية في مشاريعنا المنجزة. نؤمن بأن كل مبنى يحكي قصة، وهنا نعرض
+            لكم فصولاً من قصص النجاح التي بنيناها في مصياف.
+          </p>
+    </div>
+  </section>
+  <section className="py-8 md:py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto min-h-[50vh] md:min-h-[60vh]">
+        {allProjects.length > 0 ? (
+          
+    
+    <PortfolioGrid projects={allProjects} />
+        ) : (
+          
+    
+    <div className="text-center py-12 md:py-20">
+      <h2 className="text-xl md:text-2xl text-white font-bold">
+              قريباً..
+            
+      
+      </h2>
+      <p className="text-sm md:text-base text-slate-500 mt-2">
+              جاري تجهيز وتصوير مشاريعنا لرفعها على الموقع.
+            </p>
+    </div>
+        )}
+      
+  
+  </section>
+  <Footer />
+</main>
+  );
+}
+undefined</file>undefinedundefined<file path="app/login/page.tsx">
+//app\login\page.tsx
+"use client";
+
+import Image from "next/image";
+import { login } from "./actions";
+import { useActionState } from "react";
+import { FaLock } from "react-icons/fa";
+
+const initialState = {
+  error: "",
+};
+
+export default function LoginPage() {
+  const [state, formAction, isPending] = useActionState(
+    login as any,
+    initialState
+  );
+
+  return (
+    
+
+<div className="min-h-screen flex items-center justify-center bg-slate-950 p-4">
+  <div className="w-full max-w-md bg-slate-900 border border-white/10 p-8 rounded-2xl shadow-2xl">
+    <div className="text-center mb-8">
+      <div className="inline-block rounded-2xl  mb-4">
+        <div className="relative w-30 h-30">
+              {" "}
+              
+          
+          <Image
+                src="/logo-white.png"
+                alt="Our-Home Logo"
+                fill
+                className="object-cover rounded-xl group-hover:scale-105 transition duration-300"
+                sizes="(max-width: 768px) 48px, 48px"
+              />
+        </div>
+      </div>
+      <h1 className="text-2xl font-bold text-white">تسجيل الدخول</h1>
+      <p className="text-slate-400 text-sm mt-2">لوحة تحكم Our Home</p>
+    </div>
+    <form action={formAction} className="space-y-6">
+      <div>
+        <label className="block text-sm font-medium text-slate-300 mb-2">
+              البريد الإلكتروني
+            </label>
+        <input
+              name="email"
+              type="email"
+              required
+              className="w-full bg-slate-950 border border-white/10 rounded-lg p-3 text-white focus:outline-none focus:border-yellow-500 transition"
+              placeholder="admin@example.com"
+            />
+      </div>
+      <div>
+        <label className="block text-sm font-medium text-slate-300 mb-2">
+              كلمة المرور
+            </label>
+        <input
+              name="password"
+              type="password"
+              required
+              className="w-full bg-slate-950 border border-white/10 rounded-lg p-3 text-white focus:outline-none focus:border-yellow-500 transition"
+              placeholder="••••••••"
+            />
+      </div>
+
+          {state?.error && (
+            
+      
+      <div className="p-3 bg-red-500/10 border border-red-500/20 rounded-lg text-red-400 text-sm text-center">
+              {state.error}
+            
+      </div>
+          )}
+
+          
+      
+      <button
+            type="submit"
+            disabled={isPending}
+            className="w-full flex items-center justify-center gap-2 bg-yellow-500 hover:bg-yellow-400 text-slate-900 font-bold py-3 rounded-lg transition disabled:opacity-50"
+          >
+            {isPending ? (
+              "جاري التحقق..."
+            ) : (
+              <>
+        <FaLock size={14} />
+        <span>دخول آمن</span>
+      </>
+            )}
+          
+    
+    </button>
+  </form>
+</div>undefinedundefined</div>
+  );
+}
+undefined</file>undefinedundefined<file path="package.json">
+{
+  "name": "abce-s",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev ",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint"
+  },
+  "dependencies": {
+    "@supabase/auth-ui-react": "^0.4.7",
+    "@supabase/auth-ui-shared": "^0.1.8",
+    "@supabase/ssr": "^0.7.0",
+    "@supabase/supabase-js": "^2.79.0",
+    "next": "^16.0.10",
+    "react": "19.2.0",
+    "react-dom": "19.2.0",
+    "react-icons": "^5.5.0",
+    "strip-comments": "^2.0.1",
+    "sweetalert2": "^11.26.10"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "baseline-browser-mapping": "^2.9.7",
+    "eslint": "^9",
+    "eslint-config-next": "16.0.1",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}
+undefined</file>undefinedundefined<file path="app/components/Navbar.tsx">
+//app\components\Navbar.tsx
+"use client";
+
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import Image from "next/image";
+import { usePathname } from "next/navigation";
+import { FaBars, FaTimes } from "react-icons/fa";
+import { FaPhoneFlip } from "react-icons/fa6";
+
+export default function Navbar() {
+  const [isOpen, setIsOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  const [activeSection, setActiveSection] = useState("");
+  const pathname = usePathname();
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 20) {
+        setScrolled(true);
+      } else {
+        setScrolled(false);
+      }
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    const handleHashScroll = () => {
+      const hash = window.location.hash;
+
+      if (hash && pathname === "/") {
+        const id = hash.replace("#", "");
+        const element = document.getElementById(id);
+
+        if (element) {
+          setTimeout(() => {
+            const isMobile = window.innerWidth < 768;
+
+            const yOffset = isMobile ? -20 : -80;
+
+            const y =
+              element.getBoundingClientRect().top +
+              window.pageYOffset +
+              yOffset;
+            window.scrollTo({ top: y, behavior: "smooth" });
+          }, 300);
+        }
+      }
+    };
+
+    handleHashScroll();
+
+    window.addEventListener("hashchange", handleHashScroll);
+
+    return () => window.removeEventListener("hashchange", handleHashScroll);
+  }, [pathname]);
+
+  if (pathname.startsWith("/admin") || pathname.startsWith("/login")) {
+    return null;
+  }
+
+  const navLinks = [
+    { name: "الرئيسية", href: "/#home" },
+    { name: "عن المكتب", href: "/#about" },
+    { name: "خدماتنا", href: "/#services" },
+    { name: "معرض الأعمال", href: "/portfolio" },
+    { name: "تواصل معنا", href: "/contact" },
+  ];
+
+  return (
+    undefinedundefined<nav
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b ${
+        scrolled
+          ? "bg-slate-900/90 backdrop-blur-md border-white/10 shadow-lg"
+          : "bg-transparent border-transparent py-0 md:py-1"
+      }`}
+      id="home"
+    >
+<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+  <div className="flex items-center justify-between">
+    <Link href="/" className="flex items-center gap-2 md:gap-4 group">
+      <div className="relative w-12 md:w-16 h-auto transition-all duration-300">
+        <Image
+                src="/logo-white.png"
+                alt="Our Home Logo"
+                width={300}
+                height={160}
+                className="object-contain w-full rounded-2xl h-auto group-hover:scale-105 transition duration-300"
+                priority
+              />
+      </div>
+      <div className="h-10 w-[1px] bg-gray-600 hidden md:block">
+      </div>
+      <div className="flex flex-col">
+        <span className="text-lg md:text-xl font-bold text-white tracking-wide transition-all">
+                Our Home
+              </span>
+        <span className="text-[10px] md:text-xs text-gray-400 font-light tracking-wider whitespace-nowrap">
+                للهندسة والمقاولات
+              </span>
+      </div>
+    </Link>
+    <div className="hidden md:flex items-center gap-8">
+            {navLinks.map((link) => {
+              let isActive = false;
+
+              if (link.href.includes("#")) {
+                const sectionId = link.href.split("#")[1];
+
+                isActive = pathname === "/" && activeSection === sectionId;
+              } else {
+                isActive = pathname === link.href;
+              }
+
+              return (
+                
+      
+      <Link
+                  key={link.name}
+                  href={link.href}
+                  className={`relative text-sm font-medium transition-colors duration-300 ${
+                    isActive
+                      ? "text-yellow-500"
+                      : "text-gray-300 hover:text-white"
+                  }`}
+                >
+                  {link.name}
+                  
+        
+        <span
+                    className={`absolute -bottom-1 left-0 h-0.5 bg-yellow-500 transition-all duration-300 ${
+                      isActive ? "w-full" : "w-0"
+                    }`}
+                  ></span>
+      </Link>
+              );
+            })}
+          
+    
+    </div>
+    <div className="hidden md:flex items-center">
+      <Link
+              href="/contact"
+              className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-full text-sm font-bold transition-all shadow-[0_0_15px_rgba(59,130,246,0.5)] hover:shadow-[0_0_20px_rgba(59,130,246,0.7)]"
+            >
+        <FaPhoneFlip size={14} />
+        <span>استشارة مجانية</span>
+      </Link>
+    </div>
+    <div className="md:hidden flex items-center">
+      <button
+              onClick={() => setIsOpen(!isOpen)}
+              className="text-white focus:outline-none p-2 rounded-md hover:bg-white/10 transition"
+              aria-label="Toggle menu"
+            >
+              {isOpen ? 
+        
+        <FaTimes size={22} /> : 
+        
+        <FaBars size={22} />}
+            
+      
+      </button>
+    </div>
+  </div>
+</div>
+<div
+        className={`md:hidden absolute top-full left-0 w-full bg-slate-900/95 backdrop-blur-xl border-t border-white/10 shadow-xl overflow-hidden transition-all duration-300 ease-in-out ${
+          isOpen ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"
+        }`}
+      >
+  <div className="px-4 py-4 space-y-2 flex flex-col items-center">
+          {navLinks.map((link) => {
+            let isActive = false;
+            if (link.href.includes("#")) {
+              const sectionId = link.href.split("#")[1];
+              isActive = pathname === "/" && activeSection === sectionId;
+            } else {
+              isActive = pathname === link.href;
+            }
+
+            return (
+              
+    
+    <Link
+                key={link.name}
+                href={link.href}
+                onClick={() => setIsOpen(false)}
+                className={`w-full text-center py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
+                  isActive
+                    ? "text-yellow-500 bg-white/5"
+                    : "text-gray-300 hover:text-white hover:bg-white/5"
+                }`}
+              >
+                {link.name}
+              </Link>
+            );
+          })}
+
+          
+    
+    <div className="w-full pt-2">
+      <Link
+              href="/contact"
+              onClick={() => setIsOpen(false)}
+              className="flex justify-center items-center gap-2 w-full bg-blue-600 active:bg-blue-700 text-white py-2.5 rounded-lg text-sm font-bold shadow-md mt-1"
+            >
+        <FaPhoneFlip size={12} />
+        <span>اتصل بنا الآن</span>
+      </Link>
+    </div>
+  </div>
+</div>undefinedundefined</nav>
+  );
+}
+undefined</file>undefinedundefined<file path="app/page.tsx">
+//app\page.tsx
+import { createClient } from "./utils/supabase/server";
+import Link from "next/link";
+import Hero from "./components/Hero";
+import AboutSection from "./components/AboutSection";
+import ServicesSection from "./components/ServicesSection";
+import Footer from "./components/Footer";
+import Testimonials from "./components/Testimonials";
+
+export default async function Home() {
+  const supabase = await createClient();
+
+  const { data: projects } = await supabase
+    .from("projects")
+    .select("*")
+    .limit(3)
+    .order("created_at", { ascending: false });
+
+  return (
+    undefinedundefined<main className="min-h-screen">
+<Hero />
+<AboutSection />
+<ServicesSection />
+<Testimonials />
+<Footer />undefinedundefined</main>
+  );
+}
+undefined</file>undefinedundefined<file path="tsconfig.json">
+{
+  "compilerOptions": {
+    "target": "ES2017",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "react-jsx",
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "paths": {
+      "@/*": [
+        "./*"
+      ]
+    }
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types*.ts",
+    ".next/dev/types*.ts",
+    "**/*.mts",
+    ".next/types*.ts",
+    ".next/dev/types*.ts",
+    ".next/types*.ts",
+    ".next/dev/types*.ts",
+    ".next/types*.ts",
+    ".next/dev/types*.ts",
+    ".next/types*.ts",
+    ".next/dev/types*.ts",
+    ".next/types*.ts",
+    ".next/dev/types*.ts",
+    ".next/types*.ts",
+    ".next/dev/types*.ts",
+    ".next/types/**/*.ts",
+    ".next/dev/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}
+undefined</file>undefinedundefined<file path="app/components/Footer.tsx">
+//app\components\Footer.tsx
+"use client";
+
+import Link from "next/link";
+import Image from "next/image";
+import { usePathname } from "next/navigation";
+import {
+  FaFacebookF,
+  FaInstagram,
+  FaWhatsapp,
+  FaMapMarkerAlt,
+  FaPhoneAlt,
+  FaEnvelope,
+} from "react-icons/fa";
+
+export default function Footer() {
+  const pathname = usePathname();
+
+  if (pathname.startsWith("/admin") || pathname.startsWith("/login")) {
+    return null;
+  }
+
+  return (
+    undefinedundefined<footer className="bg-slate-950 border-t border-white/10 pt-10 pb-6 md:pt-16 md:pb-8">
+<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12 mb-10 md:mb-16">
+    <div className="space-y-4">
+      <div className="flex items-center gap-3">
+        <div className="relative w-8 h-8 md:w-10 md:h-10">
+          <Image
+                  src="/logo-white.png"
+                  alt="Our Home Logo"
+                  fill
+                  className="object-cover rounded-lg"
+                />
+        </div>
+        <span className="text-xl md:text-2xl font-bold text-white">
+                Our Home
+              </span>
+      </div>
+      <p className="text-slate-400 leading-relaxed text-sm md:text-base">
+              مكتب هندسي رائد في مصياف، يجمع بين الخبرة الأكاديمية والتنفيذ
+              المتقن. نسعى لبناء مستقبل عمراني أفضل لمدينتنا.
+            </p>
+      <div className="flex gap-3 md:gap-4 pt-2">
+        <a
+                href="https://www.facebook.com/Our.Home.masyaf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-9 h-9 md:w-10 md:h-10 rounded-full bg-slate-800 flex items-center justify-center text-white hover:bg-blue-600 transition text-sm md:text-base"
+              >
+          <FaFacebookF />
+        </a>
+        <a
+                href="https://www.instagram.com/our_home_2012/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-9 h-9 md:w-10 md:h-10 rounded-full bg-slate-800 flex items-center justify-center text-white hover:bg-pink-600 transition text-sm md:text-base"
+              >
+          <FaInstagram />
+        </a>
+        <a
+                href="https://wa.me/963994022889"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-9 h-9 md:w-10 md:h-10 rounded-full bg-slate-800 flex items-center justify-center text-white hover:bg-green-500 transition text-sm md:text-base"
+              >
+          <FaWhatsapp />
+        </a>
+      </div>
+    </div>
+    <div>
+      <h3 className="text-white font-bold text-base md:text-lg mb-4 md:mb-6 border-r-4 border-yellow-500 pr-3">
+              روابط سريعة
+            </h3>
+      <ul className="space-y-2 md:space-y-3 text-sm md:text-base">
+        <li>
+          <Link
+                  href="/#about"
+                  className="text-slate-400 hover:text-yellow-500 transition block py-1"
+                >
+                  من نحن
+                
+          
+          </Link>
+        </li>
+        <li>
+          <Link
+                  href="/#services"
+                  className="text-slate-400 hover:text-yellow-500 transition block py-1"
+                >
+                  خدماتنا
+                
+          
+          </Link>
+        </li>
+        <li>
+          <Link
+                  href="/portfolio"
+                  className="text-slate-400 hover:text-yellow-500 transition block py-1"
+                >
+                  معرض الأعمال
+                
+          
+          </Link>
+        </li>
+      </ul>
+    </div>
+    <div>
+      <h3 className="text-white font-bold text-base md:text-lg mb-4 md:mb-6 border-r-4 border-yellow-500 pr-3">
+              مجالات العمل
+            </h3>
+      <ul className="space-y-2 md:space-y-3 text-sm md:text-base">
+        <li className="text-slate-400 hover:text-white transition cursor-default py-1">
+                التصميم المعماري
+              
+        
+        </li>
+        <li className="text-slate-400 hover:text-white transition cursor-default py-1">
+                الدراسات الإنشائية
+              
+        
+        </li>
+        <li className="text-slate-400 hover:text-white transition cursor-default py-1">
+                الإكساء والديكور
+              
+        
+        </li>
+        <li className="text-slate-400 hover:text-white transition cursor-default py-1">
+                تعهدات البناء
+              
+        
+        </li>
+      </ul>
+    </div>
+    <div>
+      <h3 className="text-white font-bold text-base md:text-lg mb-4 md:mb-6 border-r-4 border-yellow-500 pr-3">
+              تواصل معنا
+            </h3>
+      <ul className="space-y-3 md:space-y-4 text-sm md:text-base">
+        <li className="flex items-start gap-3 text-slate-400">
+          <FaMapMarkerAlt className="text-yellow-500 mt-1 shrink-0" />
+          <span>سوريا، مصياف، شمال الكازية الشمالية 200 متر</span>
+        </li>
+        <li className="flex items-center gap-3 text-slate-400">
+          <FaPhoneAlt className="text-yellow-500 shrink-0" />
+          <span dir="ltr" className="hover:text-white transition">
+                  +963 994 022 889
+                </span>
+        </li>
+        <li className="flex items-center gap-3 text-slate-400">
+          <FaEnvelope className="text-yellow-500 shrink-0" />
+          <span className="break-all">ourhome.msyaf@gmail.com</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div className="border-t border-white/5 pt-2 md:pt-4 flex flex-col md:flex-row justify-between items-center text-center md:text-right gap-4 md:gap-0">
+    <p className="text-slate-500 text-xs md:text-sm">
+            © {new Date().getFullYear()} Our Home Engineering. جميع الحقوق
+            محفوظة.
+          </p>
+    <p className="text-slate-600 text-xs md:text-sm">
+            تم التصميم والتطوير بواسطة{" "}
+            
+      
+      <span className="text-slate-400 font-medium">abce</span></p>
+  </div>
+</div>undefinedundefined</footer>
+  );
+}
+undefined</file>undefinedundefined<file path="app/layout.tsx">
+//app\layout.tsx
+import type { Metadata } from "next";
+import { Tajawal } from "next/font/google";
+import "./globals.css";
+import Navbar from "./components/Navbar";
+
+const tajawal = Tajawal({
+  subsets: ["arabic"],
+  weight: ["200", "400", "500", "700", "800"],
+  variable: "--font-tajawal",
+});
+
+export const metadata: Metadata = {
+  title: "Our Home | مكتب هندسي عقاري",
+  description: "تصميم، إكساء، وتنفيذ مشاريع هندسية في مصياف.",
+  icons: {
+    icon: "/small-logo.png",
+    shortcut: "/small-logo.png",
+    apple: "/small-logo.png",
+  },
+};
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    undefinedundefined<html lang="ar" dir="rtl">
+<body
+        className={`${tajawal.className} antialiased bg-slate-950 text-slate-50`}
+      >
+  <Navbar />
+
+        {children}
+      
+
+</body>undefinedundefined</html>
+  );
+}
+undefined</file>undefinedundefined<file path="app/components/Hero.tsx">
+//app\components\Hero.tsx
+import { createClient } from "../utils/supabase/server";
+import Link from "next/link";
+import {
+  FaArrowDown,
+  FaCheckCircle,
+  FaProjectDiagram,
+  FaHardHat,
+} from "react-icons/fa";
+import { FaFileDownload, FaStar } from "react-icons/fa";
+import Image from "next/image";
+
+export default async function Hero() {
+  const supabase = await createClient();
+
+  const { data: projects } = await supabase
+    .from("projects")
+    .select("*")
+    .limit(3)
+    .order("created_at", { ascending: false });
+
+  return (
+    undefinedundefined<div id="home">
+<section className="relative min-h-[60vh] md:h-[80vh] flex items-center justify-center overflow-hidden">
+  <div className="absolute inset-0 bg-linear-to-t from-background via-transparent to-transparent z-10" />
+  <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center opacity-40" />
+  <div className="relative z-20 text-center max-w-4xl px-4">
+    <h1 className="text-3xl sm:text-4xl md:text-7xl font-bold mb-4 md:mb-6 text-transparent bg-clip-text bg-linear-to-r from-white to-gray-400">
+            نبني أحلامك تفصيلاً تلو الآخر بيتنا بيتك 
+          </h1>
+    <p className="text-base sm:text-lg md:text-xl text-text-muted mb-6 md:mb-8 leading-relaxed">
+            بيتنا Our Home :مكتب هندسي متكامل  في مصياف. ندمج بين عراقة البناء وحداثة التصميم
+            لنقدم لك مساحات سكنية وتجارية استثنائية.
+          </p>
+    <div className="flex flex-col sm:flex-row gap-3 md:gap-4 justify-center items-center">
+      <Link
+              href="/contact"
+              className="w-full sm:w-auto px-6 py-2 md:px-8 md:py-3 bg-primary hover:bg-blue-600 rounded-full font-bold transition text-sm md:text-base"
+            >
+              تواصل معنا 
+            
+      
+      </Link>
+      <Link
+              href="/portfolio"
+              className="w-full sm:w-auto px-6 py-2 md:px-8 md:py-3 border border-white/20 hover:bg-white/10 rounded-full font-bold transition backdrop-blur-sm text-sm md:text-base"
+            >
+              شاهد أعمالنا
+            
+      
+      </Link>
+    </div>
+  </div>
+</section>
+<section className="py-10 md:py-20 bg-surface/30">
+  <div className="max-w-7xl mx-auto px-4">
+    <div className="flex justify-between items-end mb-8 md:mb-12">
+      <h2 className="text-xl md:text-3xl font-bold border-r-4 border-accent pr-3 md:pr-4">
+              من أعمالنا 
+            
+      
+      </h2>
+      <Link
+              href="/portfolio"
+              className="text-sm md:text-base text-primary hover:text-accent transition"
+            >
+              عرض الكل &larr;
+            
+      
+      </Link>
+    </div>
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+            {projects?.map((project) => (
+              
+      
+      <Link
+                key={project.id}
+                href={`/portfolio/${project.id}`}
+                className="group relative aspect-4/3 overflow-hidden rounded-xl bg-gray-900 block"
+              >
+        <img
+                  src={project.image_url}
+                  alt={project.title}
+                  className="object-cover w-full h-full group-hover:scale-105 transition duration-500"
+                />
+        <div className="absolute inset-0 bg-linear-to-t from-black/80 to-transparent flex flex-col justify-end p-4 md:p-6">
+          <span className="text-accent text-xs md:text-sm font-medium">
+                    {project.category}
+                  </span>
+          <h3 className="text-lg md:text-xl font-bold text-white mt-1">
+                    {project.title}
+                  </h3>
+        </div>
+      </Link>
+            ))}
+          
+    
+    </div>
+  </div>
+</section>
+<section className="relative min-h-[85vh] md:h-screen w-full overflow-hidden flex items-center justify-center py-10 md:py-0">
+  <div
+          className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat transition-transform duration-10000 hover:scale-110"
+          style={{
+            backgroundImage:
+              "url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070&auto=format&fit=crop')",
+          }}
+        >
+    <div className="absolute inset-0 bg-slate-950/70 bg-linear-to-t from-slate-950 via-slate-950/50 to-transparent">
+    </div>
+  </div>
+  <div className="relative z-10 text-center px-4 max-w-5xl mx-auto mt-0 md:mt-10">
+    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/20 backdrop-blur-md mb-4 md:mb-6 animate-fade-in-up">
+      <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+      <span className="text-[10px] md:text-sm text-gray-200 font-medium">
+              متاحون لاستلام مشاريع جديدة في مصياف وريفها
+            </span>
+    </div>
+    <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-tight mb-4 md:mb-6 drop-shadow-lg">
+            نحول الخيال إلى{" "}
+            
+      
+      <span className="text-transparent bg-clip-text bg-linear-to-r from-yellow-400 to-yellow-600">
+              واقع معماري
+            </span></h1>
+    <p className="text-base sm:text-lg md:text-xl text-gray-300 mb-8 md:mb-10 max-w-2xl mx-auto leading-relaxed">
+            بيتنا Our Home :مكتب هندسي متكامل  في مصياف. نقدم خدمات التصميم المعماري، الإكساء
+            الداخلي، والحلول العقارية بأعلى معايير الجودة والاحترافية.
+          </p>
+    <div className="flex flex-col sm:flex-row items-center justify-center gap-3 md:gap-5 mt-4 md:mt-8">
+      <a
+              href="/company-profile.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group w-full sm:w-auto px-6 py-3 md:px-8 md:py-4 bg-linear-to-r from-yellow-500 to-yellow-400 hover:from-yellow-400 hover:to-yellow-300 text-slate-900 font-bold rounded-xl transition-all duration-300 transform hover:-translate-y-1 shadow-[0_0_20px_rgba(234,179,8,0.3)] hover:shadow-[0_0_30px_rgba(234,179,8,0.5)] flex items-center justify-center gap-2 md:gap-3 text-sm md:text-base"
+            >
+        <span>تحميل بروفايل الشركة</span>
+        <FaFileDownload className="text-base md:text-lg transition-transform group-hover:scale-110" />
+      </a>
+      <Link
+              href="/#testimonials"
+              className="group w-full sm:w-auto px-6 py-3 md:px-8 md:py-4 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-yellow-500/50 text-white font-bold rounded-xl backdrop-blur-md transition-all duration-300 flex items-center justify-center gap-2 md:gap-3 text-sm md:text-base"
+            >
+        <FaStar className="text-yellow-500 group-hover:text-yellow-400 transition-colors" />
+        <span>ماذا يقول عملاؤنا؟</span>
+      </Link>
+    </div>
+  </div>
+  <div className="absolute bottom-0 left-0 right-0 z-20 hidden md:block">
+    <div className="max-w-6xl mx-auto px-4">
+      <div className="bg-slate-900/80 backdrop-blur-md border-t border-r border-l border-white/10 rounded-t-2xl p-6 md:p-8 flex justify-around items-center text-white shadow-2xl">
+        <div className="flex items-center gap-4 group cursor-default">
+          <div className="p-3 rounded-full bg-blue-500/20 text-blue-400 group-hover:bg-blue-500 group-hover:text-white transition-colors duration-300">
+            <FaProjectDiagram size={24} />
+          </div>
+          <div className="flex flex-col">
+            <span className="text-2xl font-bold">+50</span>
+            <span className="text-sm text-gray-400">مشروع منجز</span>
+          </div>
+        </div>
+        <div className="w-px h-12 bg-white/10">
+        </div>
+        <div className="flex items-center gap-4 group cursor-default">
+          <div className="p-3 rounded-full bg-yellow-500/20 text-yellow-400 group-hover:bg-yellow-500 group-hover:text-slate-900 transition-colors duration-300">
+            <FaHardHat size={24} />
+          </div>
+          <div className="flex flex-col">
+            <span className="text-2xl font-bold">+10</span>
+            <span className="text-sm text-gray-400">سنوات خبرة</span>
+          </div>
+        </div>
+        <div className="w-px h-12 bg-white/10">
+        </div>
+        <div className="flex items-center gap-4 group cursor-default">
+          <div className="p-3 rounded-full bg-green-500/20 text-green-400 group-hover:bg-green-500 group-hover:text-white transition-colors duration-300">
+            <FaCheckCircle size={24} />
+          </div>
+          <div className="flex flex-col">
+            <span className="text-2xl font-bold">100%</span>
+            <span className="text-sm text-gray-400">
+                    التزام بالمواعيد
+                  </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div className="absolute bottom-8 md:bottom-32 animate-bounce z-10 text-white/50">
+    <FaArrowDown size={20} className="md:w-6 md:h-6" />
+  </div>
+</section>undefinedundefined</div>
+  );
+}
+undefined</file>undefinedundefined</files>

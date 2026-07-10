@@ -27,12 +27,11 @@ export default async function Hero() {
 
         <div className="relative z-20 text-center max-w-4xl px-4">
           <h1 className="text-3xl sm:text-4xl md:text-7xl font-bold mb-4 md:mb-6 text-transparent bg-clip-text bg-linear-to-r from-white to-gray-400">
-            نبني أحلامك حجراً تلو الآخر بيتنا بيتك 
+            نساعدك على تحقيق أحلامك تفصيلا تلو الآخر
           </h1>
 
           <p className="text-base sm:text-lg md:text-xl text-text-muted mb-6 md:mb-8 leading-relaxed">
-            مكتب هندسي متكامل في مصياف. ندمج بين عراقة البناء وحداثة التصميم
-            لنقدم لك مساحات سكنية وتجارية استثنائية.
+            بيتنا Our Home :مكتب هندسي متكامل يعمل بروح الفريق و يقوم بتوحيد الطاقات و توجيهها  للحصول على سكن أنيق آمن اقتصادي تحت إشراف مجموعة من المهندسين المتميزين 
           </p>
 
           <div className="flex flex-col sm:flex-row gap-3 md:gap-4 justify-center items-center">
@@ -40,7 +39,7 @@ export default async function Hero() {
               href="/contact"
               className="w-full sm:w-auto px-6 py-2 md:px-8 md:py-3 bg-primary hover:bg-blue-600 rounded-full font-bold transition text-sm md:text-base"
             >
-              تواصل معنا 
+              تواصل معنا
             </Link>
             <Link
               href="/portfolio"
@@ -56,7 +55,7 @@ export default async function Hero() {
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex justify-between items-end mb-8 md:mb-12">
             <h2 className="text-xl md:text-3xl font-bold border-r-4 border-accent pr-3 md:pr-4">
-              من أعمالنا 
+              من أعمالنا
             </h2>
             <Link
               href="/portfolio"
@@ -119,8 +118,7 @@ export default async function Hero() {
           </h1>
 
           <p className="text-base sm:text-lg md:text-xl text-gray-300 mb-8 md:mb-10 max-w-2xl mx-auto leading-relaxed">
-            مكتب هندسي متكامل في مصياف. نقدم خدمات التصميم المعماري، الإكساء
-            الداخلي، والحلول العقارية بأعلى معايير الجودة والاحترافية.
+            بيتنا Our Home : نقدم لك فرصة تملك شقة سكنية بالتقسيط و بالسعر المتغير و بدون دفعة أولى عبر عقد لاحق التخصص.
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 md:gap-5 mt-4 md:mt-8">
