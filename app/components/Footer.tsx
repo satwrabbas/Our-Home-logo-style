@@ -95,6 +95,14 @@ export default function Footer() {
               </li>
               <li>
                 <Link
+                  href="/post-allocation"
+                  className="text-yellow-500 font-bold hover:text-white transition block py-1"
+                >
+                  عقد لاحق التخصص 
+                </Link>
+              </li>
+              <li>
+                <Link
                   href="/portfolio"
                   className="text-slate-400 hover:text-yellow-500 transition block py-1"
                 >

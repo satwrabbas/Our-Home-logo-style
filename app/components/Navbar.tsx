@@ -64,6 +64,7 @@ export default function Navbar() {
 
   const navLinks = [
     { name: "الرئيسية", href: "/#home" },
+    { name: "عقد لاحق التخصص ", href: "/post-allocation" }, // تم التعديل هنا
     { name: "عن المكتب", href: "/#about" },
     { name: "خدماتنا", href: "/#services" },
     { name: "معرض الأعمال", href: "/portfolio" },
