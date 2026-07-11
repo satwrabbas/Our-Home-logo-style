@@ -79,10 +79,10 @@ export default function Footer() {
             <ul className="space-y-2 md:space-y-3 text-sm md:text-base">
               <li>
                 <Link
-                  href="/#about"
+                  href="/team"
                   className="text-slate-400 hover:text-yellow-500 transition block py-1"
                 >
-                  من نحن
+                  فريق العمل
                 </Link>
               </li>
               <li>
