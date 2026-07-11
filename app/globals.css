@@ -1,7 +1,6 @@
 @import "tailwindcss";
 
 @theme {
-  
   --color-background: #0f172a; 
   --color-surface: #1e293b;    
   --color-primary: #3b82f6;    
@@ -12,18 +11,26 @@
   --font-display: "Tajawal", sans-serif; 
 }
 
-html {
-  scroll-behavior: smooth;
-}
-
-
 #home, #about, #services {
   scroll-margin-top: 90px;
 }
+
 @layer base {
-    html {
-    scroll-behavior: smooth; 
+  html {
+    scroll-behavior: smooth;
+    /* الحجم الطبيعي للجوال */
+    font-size: 16px; 
   }
+
+  /* تطبيق "التصغير" بدءاً من شاشات التابلت فما فوق */
+  @media (min-width: 768px) {
+    html {
+      /* 14px تعادل تقريباً تصغير المتصفح لنسبة 87.5% */
+      /* إذا أردت تصغيراً أكثر يمكنك جعلها 13px أو 12px لاحقاً */
+      font-size: 14px; 
+    }
+  }
+
   body {
     background-color: var(--color-background);
     color: var(--color-text-main);
@@ -31,7 +38,6 @@ html {
     direction: rtl; 
   }
 }
-
 
 .glass-card {
   background: rgba(30, 41, 59, 0.7);
