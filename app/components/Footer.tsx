@@ -85,14 +85,7 @@ export default function Footer() {
                   فريق العمل
                 </Link>
               </li>
-              <li>
-                <Link
-                  href="/#services"
-                  className="text-slate-400 hover:text-yellow-500 transition block py-1"
-                >
-                  خدماتنا
-                </Link>
-              </li>
+              
               <li>
                 <Link
                   href="/post-allocation"

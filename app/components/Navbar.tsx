@@ -1,62 +1,94 @@
-//app\components\Navbar.tsx
 "use client";
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { FaBars, FaTimes } from "react-icons/fa";
 import { FaPhoneFlip } from "react-icons/fa6";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-
-  const [activeSection, setActiveSection] = useState("");
+  const [currentHash, setCurrentHash] = useState("");
+  
   const pathname = usePathname();
+  const router = useRouter();
 
+  // 1. مراقبة التمرير لتغيير شكل النافبار
   useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 20) {
-        setScrolled(true);
-      } else {
-        setScrolled(false);
-      }
-    };
+    const handleScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // 2. مراقبة الرابط والـ SessionStorage لتوجيه المستخدم فور وصوله للصفحة الرئيسية
   useEffect(() => {
-    const handleHashScroll = () => {
-      const hash = window.location.hash;
+    if (typeof window !== "undefined") {
+      setCurrentHash(window.location.hash);
 
-      if (hash && pathname === "/") {
-        const id = hash.replace("#", "");
-        const element = document.getElementById(id);
+      if (pathname === "/") {
+        // نتحقق مما إذا كان هناك طلب نزول معلق من صفحة أخرى
+        const pendingTarget = sessionStorage.getItem("pendingScroll");
+        const targetId = pendingTarget || (window.location.hash ? window.location.hash.substring(1) : null);
 
-        if (element) {
-          setTimeout(() => {
-            const isMobile = window.innerWidth < 768;
+        if (targetId) {
+          const scrollToElement = () => {
+            const element = document.getElementById(targetId);
+            if (element) {
+              element.scrollIntoView({ behavior: "smooth", block: "start" });
+              // استخدام replaceState يمنع تكرار الهاش في الرابط نهائياً
+              window.history.replaceState(null, "", `/#${targetId}`);
+              setCurrentHash(`#${targetId}`);
+              return true;
+            }
+            return false;
+          };
 
-            const yOffset = isMobile ? -20 : -80;
-
-            const y =
-              element.getBoundingClientRect().top +
-              window.pageYOffset +
-              yOffset;
-            window.scrollTo({ top: y, behavior: "smooth" });
-          }, 300);
+          // إذا لم يكتمل بناء الصفحة بعد، نحاول لعدة مرات (Polling ذكي)
+          if (!scrollToElement()) {
+            let attempts = 0;
+            const interval = setInterval(() => {
+              attempts++;
+              if (scrollToElement() || attempts >= 20) {
+                clearInterval(interval);
+              }
+            }, 100);
+          }
+          
+          // تنظيف الذاكرة بعد الاستخدام
+          if (pendingTarget) sessionStorage.removeItem("pendingScroll");
         }
       }
-    };
-
-    handleHashScroll();
-
-    window.addEventListener("hashchange", handleHashScroll);
-
-    return () => window.removeEventListener("hashchange", handleHashScroll);
+    }
   }, [pathname]);
+
+  // 3. نظام التوجيه المخصص (خارج الصندوق) لمنع أخطاء Next.js
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    e.preventDefault(); // إيقاف السلوك الافتراضي المزعج
+    setIsOpen(false);
+
+    if (href.startsWith("/#")) {
+      const targetId = href.replace("/#", "");
+
+      if (pathname === "/") {
+        // نحن في الرئيسية: ننزل للقسم فوراً وبنعومة
+        const element = document.getElementById(targetId);
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth", block: "start" });
+          window.history.replaceState(null, "", `/#${targetId}`);
+          setCurrentHash(`/#${targetId}`);
+        }
+      } else {
+        // نحن في صفحة أخرى: نحفظ الهدف في الذاكرة وننتقل للرئيسية
+        sessionStorage.setItem("pendingScroll", targetId);
+        router.push("/");
+      }
+    } else {
+      // روابط طبيعية (مثل /team أو /contact)
+      router.push(href);
+    }
+  };
 
   if (pathname.startsWith("/admin") || pathname.startsWith("/login")) {
     return null;
@@ -64,9 +96,8 @@ export default function Navbar() {
 
   const navLinks = [
     { name: "الرئيسية", href: "/#home" },
-    { name: "عقد لاحق التخصص ", href: "/post-allocation" }, // تم التعديل هنا
+    { name: "عقد لاحق التخصص", href: "/post-allocation" },
     { name: "فريق العمل", href: "/team" }, 
-    { name: "خدماتنا", href: "/#services" },
     { name: "معرض الأعمال", href: "/portfolio" },
     { name: "تواصل معنا", href: "/contact" },
   ];
@@ -82,7 +113,9 @@ export default function Navbar() {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2 md:gap-4 group">
+          
+          {/* تم استبدال الـ Link الافتراضي هنا أيضاً بنظامنا المخصص */}
+          <a href="/#home" onClick={(e) => handleNavClick(e, "/#home")} className="flex items-center gap-2 md:gap-4 group cursor-pointer">
             <div className="relative w-12 md:w-16 h-auto transition-all duration-300">
               <Image
                 src="/logo-white.png"
@@ -93,9 +126,7 @@ export default function Navbar() {
                 priority
               />
             </div>
-
             <div className="h-10 w-[1px] bg-gray-600 hidden md:block"></div>
-
             <div className="flex flex-col">
               <span className="text-lg md:text-xl font-bold text-white tracking-wide transition-all">
                 Our Home
@@ -104,28 +135,22 @@ export default function Navbar() {
                 للهندسة والمقاولات
               </span>
             </div>
-          </Link>
+          </a>
 
           <div className="hidden md:flex items-center gap-8">
             {navLinks.map((link) => {
-              let isActive = false;
-
-              if (link.href.includes("#")) {
-                const sectionId = link.href.split("#")[1];
-
-                isActive = pathname === "/" && activeSection === sectionId;
-              } else {
-                isActive = pathname === link.href;
-              }
+              // التحقق من الرابط النشط لتمييزه باللون
+              const isHashLink = link.href.includes("#");
+              const isActive = (!isHashLink && pathname === link.href) || 
+                               (isHashLink && pathname === "/" && currentHash === link.href.replace("/", ""));
 
               return (
-                <Link
+                <a
                   key={link.name}
                   href={link.href}
-                  className={`relative text-sm font-medium transition-colors duration-300 ${
-                    isActive
-                      ? "text-yellow-500"
-                      : "text-gray-300 hover:text-white"
+                  onClick={(e) => handleNavClick(e, link.href)}
+                  className={`relative text-sm font-medium transition-colors duration-300 cursor-pointer ${
+                    isActive ? "text-yellow-500" : "text-gray-300 hover:text-white"
                   }`}
                 >
                   {link.name}
@@ -134,19 +159,20 @@ export default function Navbar() {
                       isActive ? "w-full" : "w-0"
                     }`}
                   ></span>
-                </Link>
+                </a>
               );
             })}
           </div>
 
           <div className="hidden md:flex items-center">
-            <Link
+            <a
               href="/contact"
-              className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-full text-sm font-bold transition-all shadow-[0_0_15px_rgba(59,130,246,0.5)] hover:shadow-[0_0_20px_rgba(59,130,246,0.7)]"
+              onClick={(e) => handleNavClick(e, "/contact")}
+              className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-full text-sm font-bold transition-all shadow-[0_0_15px_rgba(59,130,246,0.5)] hover:shadow-[0_0_20px_rgba(59,130,246,0.7)] cursor-pointer"
             >
               <FaPhoneFlip size={14} />
               <span>استشارة مجانية</span>
-            </Link>
+            </a>
           </div>
 
           <div className="md:hidden flex items-center">
@@ -168,39 +194,33 @@ export default function Navbar() {
       >
         <div className="px-4 py-4 space-y-2 flex flex-col items-center">
           {navLinks.map((link) => {
-            let isActive = false;
-            if (link.href.includes("#")) {
-              const sectionId = link.href.split("#")[1];
-              isActive = pathname === "/" && activeSection === sectionId;
-            } else {
-              isActive = pathname === link.href;
-            }
-
+             const isHashLink = link.href.includes("#");
+             const isActive = (!isHashLink && pathname === link.href) || 
+                              (isHashLink && pathname === "/" && currentHash === link.href.replace("/", ""));
+                              
             return (
-              <Link
+              <a
                 key={link.name}
                 href={link.href}
-                onClick={() => setIsOpen(false)}
-                className={`w-full text-center py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
-                  isActive
-                    ? "text-yellow-500 bg-white/5"
-                    : "text-gray-300 hover:text-white hover:bg-white/5"
+                onClick={(e) => handleNavClick(e, link.href)}
+                className={`w-full text-center py-2.5 rounded-lg text-sm font-medium transition-all duration-200 cursor-pointer ${
+                  isActive ? "text-yellow-500 bg-white/5" : "text-gray-300 hover:text-white hover:bg-white/5"
                 }`}
               >
                 {link.name}
-              </Link>
+              </a>
             );
           })}
 
           <div className="w-full pt-2">
-            <Link
+            <a
               href="/contact"
-              onClick={() => setIsOpen(false)}
-              className="flex justify-center items-center gap-2 w-full bg-blue-600 active:bg-blue-700 text-white py-2.5 rounded-lg text-sm font-bold shadow-md mt-1"
+              onClick={(e) => handleNavClick(e, "/contact")}
+              className="flex justify-center items-center gap-2 w-full bg-blue-600 active:bg-blue-700 text-white py-2.5 rounded-lg text-sm font-bold shadow-md mt-1 cursor-pointer"
             >
               <FaPhoneFlip size={12} />
               <span>اتصل بنا الآن</span>
-            </Link>
+            </a>
           </div>
         </div>
       </div>
