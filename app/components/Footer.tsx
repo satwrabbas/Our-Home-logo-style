@@ -162,7 +162,7 @@ export default function Footer() {
           </p>
           <p className="text-slate-600 text-xs md:text-sm">
             تم التصميم والتطوير بواسطة{" "}
-            <span className="text-slate-400 font-medium">abce</span>
+            <span className="text-slate-400 font-medium">Abbas Satwr</span>
           </p>
         </div>
       </div>

@@ -9,8 +9,8 @@ import {
   FaChartLine,
   FaCalculator,
   FaEnvelope,
-  FaPhoneAlt,
-  FaGraduationCap, // تمت إضافة هذه الأيقونة
+  FaWhatsapp, // تمت إضافة أيقونة الواتساب هنا
+  FaGraduationCap,
 } from "react-icons/fa";
 
 export const metadata = {
@@ -25,7 +25,7 @@ export default function TeamPage() {
       role: "المدير المالي",
       icon: <FaChartLine />,
       desc: "عقلية مالية فذة تدير الأصول العقارية وتضمن الحفاظ على قيمة مدخرات المكتتبين بدلالة مواد البناء (معادل التغير السعري) لتحقيق أقصى درجات الأمان.",
-      image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=1974&auto=format&fit=crop", 
+      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1974&auto=format&fit=crop", 
       color: "text-green-500",
       bg: "bg-green-500/10",
       border: "hover:border-green-500/50",
@@ -90,7 +90,7 @@ export default function TeamPage() {
           <div className="flex flex-col lg:flex-row items-center gap-10 relative z-10">
             <div className="w-56 h-56 md:w-72 md:h-72 relative shrink-0 rounded-2xl overflow-hidden border-2 border-yellow-500/50 shadow-[0_0_30px_rgba(234,179,8,0.2)]">
               <Image 
-                src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1974&auto=format&fit=crop" 
+                src="https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=1974&auto=format&fit=crop" 
                 alt="المهندس محمد كامل علي" 
                 fill 
                 className="object-cover"
@@ -112,8 +112,14 @@ export default function TeamPage() {
               </p>
               
               <div className="flex justify-center lg:justify-start gap-4">
-                <a href="tel:0994022889" className="flex items-center gap-2 bg-yellow-500 hover:bg-yellow-400 text-slate-900 font-bold px-6 py-3 rounded-xl transition">
-                  <FaPhoneAlt />
+                {/* تم تعديل هذا الزر ليوجه للواتساب مباشرة */}
+                <a 
+                  href="https://wa.me/963994022889" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 bg-yellow-500 hover:bg-yellow-400 text-slate-900 font-bold px-6 py-3 rounded-xl transition"
+                >
+                  <FaWhatsapp className="text-xl" />
                   <span dir="ltr">0994 022 889</span>
                 </a>
               </div>
@@ -158,10 +164,9 @@ export default function TeamPage() {
         </div>
       </section>
 
-      {/* Internship & Training Section (التدريب والتأهيل) */}
+      {/* Internship & Training Section */}
       <section className="pb-16 md:pb-24 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="bg-gradient-to-r from-blue-900/40 to-slate-900 border border-blue-500/20 rounded-3xl p-8 md:p-12 flex flex-col md:flex-row items-center gap-8 shadow-2xl relative overflow-hidden">
-          {/* تأثير بصري في الخلفية */}
           <div className="absolute -left-10 -bottom-10 opacity-10">
             <FaGraduationCap className="text-[200px] text-blue-500" />
           </div>
@@ -183,7 +188,7 @@ export default function TeamPage() {
                 className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl transition shadow-lg shadow-blue-500/20"
               >
                 <FaEnvelope />
-                <span>تدرب معنا الآن</span>
+                <span>قدم طلب للتدريب معنا</span>
               </Link>
             </div>
           </div>
