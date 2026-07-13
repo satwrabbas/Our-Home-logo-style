@@ -1,8 +1,7 @@
-//app\admin\layout.tsx
+// app/admin/layout.tsx
 import Link from "next/link";
 import {
   FaProjectDiagram,
-  FaEnvelope,
   FaHome,
   FaSignOutAlt,
   FaQuoteRight,
@@ -28,14 +27,6 @@ export default function AdminLayout({
           >
             <FaProjectDiagram />
             <span>إدارة المشاريع</span>
-          </Link>
-
-          <Link
-            href="/admin/inquiries"
-            className="flex items-center gap-3 px-4 py-3 text-slate-300 hover:bg-white/5 hover:text-white rounded-lg transition"
-          >
-            <FaEnvelope />
-            <span>رسائل العملاء</span>
           </Link>
 
           <Link

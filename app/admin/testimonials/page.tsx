@@ -1,7 +1,8 @@
-//app\admin\testimonials\page.tsx
+// app/admin/testimonials/page.tsx
 import { createClient } from "../../utils/supabase/server";
-import { addTestimonial, deleteTestimonial } from "./actions";
-import { FaTrash, FaStar, FaPlus, FaImage } from "react-icons/fa";
+import { deleteTestimonial } from "./actions";
+import { FaTrash, FaStar } from "react-icons/fa";
+import AddTestimonialForm from "./AddTestimonialForm";
 
 export default async function TestimonialsAdmin() {
   const supabase = await createClient();
@@ -15,73 +16,8 @@ export default async function TestimonialsAdmin() {
     <div className="max-w-4xl mx-auto">
       <h1 className="text-3xl font-bold text-white mb-8">إدارة آراء العملاء</h1>
 
-      <div className="bg-slate-900 p-6 rounded-2xl border border-white/10 mb-12">
-        <h2 className="text-xl font-bold text-yellow-500 mb-4 flex items-center gap-2">
-          <FaPlus /> إضافة رأي جديد
-        </h2>
-
-        <form
-          action={addTestimonial}
-          className="grid grid-cols-1 md:grid-cols-2 gap-4"
-        >
-          <input
-            name="client_name"
-            required
-            placeholder="اسم العميل"
-            className="bg-slate-950 p-3 rounded-lg border border-white/10 text-white focus:border-yellow-500 outline-none"
-          />
-
-          <input
-            name="role"
-            placeholder="الصفة (مثال: مالك فيلا)"
-            className="bg-slate-950 p-3 rounded-lg border border-white/10 text-white focus:border-yellow-500 outline-none"
-          />
-
-          <div className="relative group">
-            <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-slate-500">
-              <FaImage />
-            </div>
-            <input
-              type="file"
-              name="image"
-              accept="image/*"
-              className="block w-full text-sm text-slate-400
-                file:mr-4 file:py-3 file:px-4
-                file:rounded-l-lg file:border-0
-                file:text-sm file:font-semibold
-                file:bg-slate-800 file:text-yellow-500
-                hover:file:bg-slate-700
-                bg-slate-950 rounded-lg border border-white/10 cursor-pointer"
-            />
-          </div>
-
-          <div className="flex gap-4">
-            <select
-              name="rating"
-              className="bg-slate-950 p-3 rounded-lg border border-white/10 text-white focus:border-yellow-500 outline-none w-full"
-            >
-              <option value="5">⭐⭐⭐⭐⭐ (5)</option>
-              <option value="4">⭐⭐⭐⭐ (4)</option>
-              <option value="3">⭐⭐⭐ (3)</option>
-            </select>
-          </div>
-
-          <textarea
-            name="content"
-            required
-            placeholder="نص الرأي..."
-            rows={3}
-            className="md:col-span-2 bg-slate-950 p-3 rounded-lg border border-white/10 text-white focus:border-yellow-500 outline-none resize-none"
-          />
-
-          <button
-            type="submit"
-            className="md:col-span-2 bg-yellow-500 hover:bg-yellow-400 text-slate-900 font-bold py-3 rounded-lg transition"
-          >
-            حفظ الرأي
-          </button>
-        </form>
-      </div>
+      {/* المكون التفاعلي الجديد كلياً */}
+      <AddTestimonialForm />
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {reviews?.map((review) => (
