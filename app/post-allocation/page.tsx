@@ -63,26 +63,21 @@ export default function PostAllocationPage() {
     {
       num: "2",
       title: "مرحلة التخصص (تحديد الشقة)",
-      desc: "عند وصول مدخراتك لـ 40% من قيمة شقة، تتخصص بها (تحديد الطابق، المساحة، والاتجاه السعري).",
+      desc: "عند وصول مدخراتك لـ 40% من قيمة شقة، تتخصص بها (تحديد الطابق، المساحة، الاتجاه, و المكان).",
     },
     {
       num: "3",
       title: "التسليم الأولي",
-      desc: "تستلم الشقة للبدء بالإكساء (يتطلب بلوغ 60% من القيمة إذا كان الإكساء عن طريقنا).",
+      desc: "تستلم الشقة للبدء بالإكساء (يتطلب بلوغ 60% من قيمة الشقة ).",
     },
     {
       num: "4",
-      title: "التسليم النهائي",
-      desc: "بعد استكمال الإفراز للبناء الواقعة ضمنه الشقة السكنية المخصصة.",
-    },
-    {
-      num: "5",
       title: "التجهيزات المشتركة",
       desc: "دفع ما يترتب لتجهيز (الدرج، المناور، العدادات، الممرات الخارجية).",
     },
     {
-      num: "6",
-      title: "الفراغ ونقل الملكية",
+      num: "5",
+      title: "التسليم النهائي و نقل الملكية",
       desc: "نقل الملكية (طابو أخضر 2400 سهم) بمجرد الانتهاء من سداد كامل ثمن الشقة.",
     },
   ];
@@ -238,7 +233,7 @@ export default function PostAllocationPage() {
             <h2 className="text-3xl md:text-5xl font-bold text-white mb-4">
               رحلة تملك شقة سكنية
             </h2>
-            <p className="text-slate-400 text-lg">من الدفعة الأولى (أو بدونها) وحتى استلام الطابو الأخضر</p>
+            <p className="text-slate-400 text-lg">من الدفعة الأولى  وحتى استلام الطابو الأخضر</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -307,7 +302,7 @@ export default function PostAllocationPage() {
             <div className="bg-slate-900 border border-white/5 p-6 md:p-8 rounded-2xl hover:border-yellow-500/30 transition-colors">
               <h4 className="text-lg font-bold text-white mb-3 flex items-start gap-3">
                 <span className="text-yellow-500 text-xl">؟</span>
-                هل يمكنني استخدام رصيدي لكسوة شقتي الحالية؟
+                هل يمكنني استخدام رصيدي لتجهيز شقتي الحالية؟
               </h4>
               <p className="text-slate-400 text-sm leading-relaxed pr-6">
                 نعم بكل تأكيد! عقد لاحق التخصص مرن جداً. يمكنك تحويل قيمة الرصيد لإكساء شقة تملكها، أو لإنشاء شقة في أرض تملكها، أو حتى الاستفادة منه في أي مشروع جديد لشركتنا.
