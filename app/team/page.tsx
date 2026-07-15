@@ -68,15 +68,26 @@ export default function TeamPage() {
       <Navbar />
 
       {/* Hero Section */}
-      <section className="relative pt-32 pb-20 md:pt-40 md:pb-24 overflow-hidden border-b border-white/5">
-        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=2071&auto=format&fit=crop')] bg-cover bg-center opacity-10" />
-        <div className="absolute inset-0 bg-gradient-to-b from-slate-950 via-slate-950/80 to-slate-900" />
+      <section className="relative min-h-[60vh] md:min-h-[70vh] flex items-center justify-center overflow-hidden border-b border-white/5 pt-24 pb-16">
         
-        <div className="relative z-10 max-w-5xl mx-auto px-4 text-center">
-          <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight">
+        {/* طبقة الصورة مع التأثير الحركي السينمائي البطيء */}
+        <div 
+          className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat transition-transform duration-10000 hover:scale-110"
+          style={{ 
+            // هذه هي الصورة المؤقتة لفريق العمل، يمكنك تغيير الرابط لاحقاً بصورتكم الجماعية
+            backgroundImage: "url('https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=2070&auto=format&fit=crop')" 
+          }}
+        >
+          {/* طبقة التعتيم (الفلتر) المدمجة لحماية النص وجعله مقروءاً بوضوح */}
+          <div className="absolute inset-0 bg-slate-950/70 bg-linear-to-t from-slate-950 via-slate-950/60 to-transparent"></div>
+        </div>
+        
+        {/* طبقة المحتوى والنصوص */}
+        <div className="relative z-10 max-w-5xl mx-auto px-4 text-center mt-8">
+          <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight drop-shadow-lg">
             العقول التي تبني <span className="text-yellow-500">المستقبل</span>
           </h1>
-          <p className="text-lg md:text-xl text-slate-400 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-lg md:text-xl text-slate-300 max-w-3xl mx-auto leading-relaxed drop-shadow-md">
             في مكتب <span className="text-white font-bold">Our Home</span>، نؤمن أن الإسمنت والحديد لا يبنيان البيوت وحدهما، بل العقول الهندسية المبدعة والأيادي الأمينة والإدارة المالية الصارمة هي من تصنع الفارق. تعرف على شركاء نجاحك.
           </p>
         </div>
