@@ -224,31 +224,86 @@ export default function TeamPage() {
         </div>
       </section>
 
-      {/* 2. الصورة العريضة الإضافية المصاحبة التي تعرض التأهيل الميداني (حاوية منفصلة تحتها) */}
-      <section className="pb-16 md:pb-24 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mt-12">
-        <div className="relative h-64 md:h-80 rounded-3xl overflow-hidden group border border-white/5 hover:border-blue-500/30 transition-all duration-500 shadow-xl">
-          <div
-            className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat transition-transform duration-10000 hover:scale-110"
-            style={{
-              backgroundImage:
-                "url('https://images.unsplash.com/photo-1531538606174-0f90ff5dce83?q=80&w=1200&auto=format&fit=crop')",
-            }}
-          />
-          {/* التدرج الناعم في أسفل الصورة لحماية عنوان الصورة من البهتان */}
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent" />
+      {/* 2. شبكة بطاقات مجالات التدريب */}
+      <section className="pb-16 md:pb-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12">
+        <div className="text-center mb-12">
+          <h3 className="text-2xl md:text-4xl font-bold text-white mb-4">
+            ماذا يتضمن <span className="text-blue-500">البرنامج التدريبي؟</span>
+          </h3>
+          <p className="text-slate-400 max-w-2xl mx-auto">
+            نحرص على دمج المتدربين في كافة مراحل العمل الهندسي، ليخرج المهندس جاهزاً لمواجهة تحديات سوق العمل الحقيقي.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
           
-          {/* بطاقة النصوص المدمجة والمنسقة بعناية */}
-          <div className="absolute bottom-6 right-6 left-6 text-right">
-            <span className="inline-block px-3 py-1 bg-blue-500/20 backdrop-blur-md text-blue-300 text-xs font-bold rounded-full border border-blue-500/30 mb-2">
-              التأهيل العملي والميداني
-            </span>
-            <h3 className="text-lg md:text-2xl font-bold text-white drop-shadow-md">
-              متابعة وإشراف مباشر من كبار المهندسين لدمج الخريجين ببيئة العمل الواقعية في مواقع المشاريع
-            </h3>
+          {/* البطاقة الأولى: التصميم المكتبي */}
+          <div className="bg-slate-900 border border-white/5 rounded-2xl overflow-hidden group hover:-translate-y-2 transition-all duration-300 hover:shadow-[0_0_30px_rgba(59,130,246,0.15)] hover:border-blue-500/30 flex flex-col">
+            <div className="relative h-56 w-full overflow-hidden shrink-0">
+              <div className="absolute inset-0 bg-blue-500/10 mix-blend-overlay z-10 group-hover:opacity-0 transition-opacity duration-500"></div>
+              <div
+                className="absolute inset-0 w-full h-full bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
+                style={{ backgroundImage: "url('https://images.unsplash.com/photo-1600880292203-757bb62b4baf?q=80&w=2070&auto=format&fit=crop')" }}
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/40 to-transparent z-10"></div>
+            </div>
+            <div className="p-6 relative z-20 -mt-12 flex-grow flex flex-col">
+              <div className="w-12 h-12 rounded-xl bg-blue-600 text-white flex items-center justify-center text-xl mb-4 shadow-lg shadow-blue-900/50 border border-white/10 group-hover:scale-110 group-hover:rotate-3 transition-transform">
+                <FaPencilRuler />
+              </div>
+              <h4 className="text-xl font-bold text-white mb-3">التصميم وإعداد المخططات</h4>
+              <p className="text-slate-400 text-sm leading-relaxed text-justify">
+                تدريب مكثف على التطبيقات الهندسية المعتمدة. تحويل الأفكار المعمارية إلى مخططات تنفيذية دقيقة (2D و 3D)، مع مراعاة الجوانب الجمالية والوظيفية.
+              </p>
+            </div>
           </div>
+
+          {/* البطاقة الثانية: التدريب الميداني */}
+          <div className="bg-slate-900 border border-white/5 rounded-2xl overflow-hidden group hover:-translate-y-2 transition-all duration-300 hover:shadow-[0_0_30px_rgba(59,130,246,0.15)] hover:border-blue-500/30 flex flex-col">
+            <div className="relative h-56 w-full overflow-hidden shrink-0">
+              <div className="absolute inset-0 bg-blue-500/10 mix-blend-overlay z-10 group-hover:opacity-0 transition-opacity duration-500"></div>
+              <div
+                className="absolute inset-0 w-full h-full bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
+                style={{ backgroundImage: "url('https://images.unsplash.com/photo-1541888082425-eb1bbd9299ce?q=80&w=2070&auto=format&fit=crop')" }}
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/40 to-transparent z-10"></div>
+            </div>
+            <div className="p-6 relative z-20 -mt-12 flex-grow flex flex-col">
+              <div className="w-12 h-12 rounded-xl bg-blue-600 text-white flex items-center justify-center text-xl mb-4 shadow-lg shadow-blue-900/50 border border-white/10 group-hover:scale-110 group-hover:rotate-3 transition-transform">
+                <FaHardHat />
+              </div>
+              <h4 className="text-xl font-bold text-white mb-3">الإشراف والتنفيذ الميداني</h4>
+              <p className="text-slate-400 text-sm leading-relaxed text-justify">
+                النزول إلى ورشات العمل الحقيقية. التدرب على قراءة المخططات في الموقع، استلام أعمال الحديد والبيتون، ومطابقة التنفيذ مع الكودات الهندسية.
+              </p>
+            </div>
+          </div>
+
+          {/* البطاقة الثالثة: حساب الكميات */}
+          <div className="bg-slate-900 border border-white/5 rounded-2xl overflow-hidden group hover:-translate-y-2 transition-all duration-300 hover:shadow-[0_0_30px_rgba(59,130,246,0.15)] hover:border-blue-500/30 flex flex-col">
+            <div className="relative h-56 w-full overflow-hidden shrink-0">
+              <div className="absolute inset-0 bg-blue-500/10 mix-blend-overlay z-10 group-hover:opacity-0 transition-opacity duration-500"></div>
+              <div
+                className="absolute inset-0 w-full h-full bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
+                style={{ backgroundImage: "url('https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=2070&auto=format&fit=crop')" }}
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/40 to-transparent z-10"></div>
+            </div>
+            <div className="p-6 relative z-20 -mt-12 flex-grow flex flex-col">
+              <div className="w-12 h-12 rounded-xl bg-blue-600 text-white flex items-center justify-center text-xl mb-4 shadow-lg shadow-blue-900/50 border border-white/10 group-hover:scale-110 group-hover:rotate-3 transition-transform">
+                <FaCalculator />
+              </div>
+              <h4 className="text-xl font-bold text-white mb-3">حساب الكميات والتكاليف</h4>
+              <p className="text-slate-400 text-sm leading-relaxed text-justify">
+                فهم الجانب التنفيذي المالي. التدرب على حساب الكميات بدقة، تحليل أسعار المواد، وإعداد الكشوفات بما يضمن دقة دراسة ميزانية المشاريع.
+              </p>
+            </div>
+          </div>
+
         </div>
       </section>
 
+      
       {/* Hiring / Join Us CTA */}
       <section className="py-20 relative text-center border-t border-white/5 bg-slate-900/30">
         <div className="max-w-3xl mx-auto px-4">
