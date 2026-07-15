@@ -1,3 +1,4 @@
+// app/team/page.tsx
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import Image from "next/image";
@@ -9,7 +10,7 @@ import {
   FaChartLine,
   FaCalculator,
   FaEnvelope,
-  FaWhatsapp, // تمت إضافة أيقونة الواتساب هنا
+  FaWhatsapp,
   FaGraduationCap,
 } from "react-icons/fa";
 
@@ -112,7 +113,6 @@ export default function TeamPage() {
               </p>
               
               <div className="flex justify-center lg:justify-start gap-4">
-                {/* تم تعديل هذا الزر ليوجه للواتساب مباشرة */}
                 <a 
                   href="https://wa.me/963994022889" 
                   target="_blank" 
@@ -164,34 +164,83 @@ export default function TeamPage() {
         </div>
       </section>
 
-      {/* Internship & Training Section */}
+      {/* Internship & Training Section - الستايل الحصري الغامر المطابق لصفحة الهوم */}
       <section className="pb-16 md:pb-24 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-gradient-to-r from-blue-900/40 to-slate-900 border border-blue-500/20 rounded-3xl p-8 md:p-12 flex flex-col md:flex-row items-center gap-8 shadow-2xl relative overflow-hidden">
-          <div className="absolute -left-10 -bottom-10 opacity-10">
-            <FaGraduationCap className="text-[200px] text-blue-500" />
-          </div>
-
-          <div className="w-20 h-20 md:w-24 md:h-24 shrink-0 bg-blue-500/20 text-blue-500 rounded-full flex items-center justify-center text-4xl md:text-5xl relative z-10">
-            <FaGraduationCap />
-          </div>
+        <div className="space-y-8">
           
-          <div className="flex-1 text-center md:text-right relative z-10">
-            <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">
-              باب التدريب والتأهيل مفتوح دائماً
-            </h2>
-            <p className="text-slate-300 text-lg leading-relaxed mb-6">
-              استناداً إلى إيماننا العميق بصناعة الأجيال ونقل الخبرات، يفتح مكتب <span className="text-white font-bold">Our Home</span> أبوابه باستمرار لاستقبال المهندسين المتدربين وحديثي التخرج. نقدم <span className="text-blue-400 font-bold">سنوات طويلة من التدريب والتأهيل الهندسي وعلى كافة البرامج الهندسية</span>، لدمجهم في بيئة العمل الحقيقية وتجهيزهم لسوق العمل باحترافية لتكون "بيتنا" خيارك الأفضل من الفكرة حتى التنفيذ النهائي.
-            </p>
-            <div className="flex justify-center md:justify-start">
-              <Link
-                href="/contact?subject=طلب تدريب هندسي"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl transition shadow-lg shadow-blue-500/20"
-              >
-                <FaEnvelope />
-                <span>قدم طلب للتدريب معنا</span>
-              </Link>
+          {/* 1. راية عريضة تحاكي تماماً ستايل "نحول الخيال إلى واقع معماري" بملف Hero.tsx */}
+          <div className="relative min-h-[60vh] md:h-[65vh] w-full overflow-hidden flex items-center justify-center rounded-3xl border border-blue-500/20 shadow-2xl py-12 md:py-0">
+            
+            {/* الخلفية المعمارية المتحركة بالنعومة المتناهية */}
+            <div
+              className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat transition-transform duration-10000 hover:scale-110"
+              style={{
+                backgroundImage:
+                  "url('https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=2070&auto=format&fit=crop')",
+              }}
+            >
+              {/* تدرج لوني داكن مائل للأزرق مع طبقة مزدوجة لحفظ وضوح الكلمات */}
+              <div className="absolute inset-0 bg-slate-950/70 bg-linear-to-t from-slate-950 via-slate-950/50 to-transparent"></div>
+            </div>
+
+            {/* العناصر المتراصة في المنتصف (تتوسطها الشاشات والكتابات) */}
+            <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
+              
+              {/* شارة علوية مضيئة متناسقة */}
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 backdrop-blur-md mb-6 animate-fade-in-up">
+                <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
+                <span className="text-xs md:text-sm text-blue-300 font-medium">
+                  سنوات طويلة من التأهيل والتدريب الهندسي
+                </span>
+              </div>
+
+              {/* عنوان رئيسي مع تدرج لوني يعكس الأسلوب المعماري */}
+              <h2 className="text-3xl sm:text-5xl md:text-6xl font-bold text-white leading-tight mb-6 drop-shadow-lg">
+                باب التدريب والتأهيل <span className="text-transparent bg-clip-text bg-linear-to-r from-blue-400 to-blue-600">مفتوح دائماً</span>
+              </h2>
+
+              {/* نص وصفي منسق لتأدية غرض التواصل الفعال */}
+              <p className="text-base sm:text-lg md:text-xl text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed drop-shadow-sm text-center">
+                استناداً إلى إيماننا العميق بصناعة الأجيال ونقل الخبرات، يفتح مكتب <span className="text-white font-bold">Our Home</span> أبوابه باستمرار استقبالاً للمهندسين المتدربين وحديثي التخرج. نقدم تأهيلاً هندسياً شاملاً وعلى كافة البرامج الهندسية، لدمجهم في بيئة العمل الحقيقية وتجهيزهم لسوق العمل باحترافية لتكون "بيتنا" خيارك الأفضل من الفكرة حتى التنفيذ النهائي.
+              </p>
+
+              {/* زر تواصل مجهز بستايل متوهج وأيقونة متفاعلة */}
+              <div className="flex justify-center">
+                <Link
+                  href="/contact?subject=طلب تدريب هندسي"
+                  className="group inline-flex items-center gap-2 px-8 py-4 bg-linear-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 text-white font-bold rounded-xl transition-all duration-300 transform hover:-translate-y-1 shadow-[0_0_20px_rgba(59,130,246,0.3)] hover:shadow-[0_0_30px_rgba(59,130,246,0.5)] text-base"
+                >
+                  <FaEnvelope className="transition-transform group-hover:scale-110" />
+                  <span>قدم طلب للتدريب معنا</span>
+                </Link>
+              </div>
+
             </div>
           </div>
+
+          {/* 2. الصورة العريضة الإضافية المصاحبة التي تعرض التأهيل الميداني */}
+          <div className="relative h-64 md:h-80 rounded-3xl overflow-hidden group border border-white/5 hover:border-blue-500/30 transition-all duration-500 shadow-xl">
+            <div
+              className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat transition-transform duration-10000 hover:scale-110"
+              style={{
+                backgroundImage:
+                  "url('https://images.unsplash.com/photo-1531538606174-0f90ff5dce83?q=80&w=1200&auto=format&fit=crop')",
+              }}
+            />
+            {/* التدرج الناعم في أسفل الصورة لحماية عنوان الصورة من البهتان */}
+            <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent" />
+            
+            {/* بطاقة النصوص المدمجة والمنسقة بعناية */}
+            <div className="absolute bottom-6 right-6 left-6 text-right">
+              <span className="inline-block px-3 py-1 bg-blue-500/20 backdrop-blur-md text-blue-300 text-xs font-bold rounded-full border border-blue-500/30 mb-2">
+                التأهيل العملي والميداني
+              </span>
+              <h3 className="text-lg md:text-2xl font-bold text-white drop-shadow-md">
+                متابعة وإشراف مباشر من كبار المهندسين لدمج الخريجين ببيئة العمل الواقعية في مواقع المشاريع
+              </h3>
+            </div>
+          </div>
+
         </div>
       </section>
 
