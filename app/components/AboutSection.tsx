@@ -29,11 +29,6 @@ export default function AboutSection() {
       title: "إشراف مباشر",
       desc: "مهندسون متخصصون في الموقع لضمان الجودة.",
     },
-    {
-      icon: <FaUserTie />,
-      title: " ",
-      desc: "مهندسون متخصصون في الموقع لضمان الجودة.",
-    },
   ];
 
   return (
