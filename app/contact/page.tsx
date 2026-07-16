@@ -167,14 +167,27 @@ export default function ContactPage() {
     <main className="min-h-screen bg-slate-950 flex flex-col">
       <Navbar />
 
-      <div className="pt-24 pb-8 md:pt-32 md:pb-12 bg-slate-900 text-center px-4 border-b border-white/5">
-        <h1 className="text-3xl md:text-5xl font-bold text-white mb-4">
-          تواصل معنا
-        </h1>
-        <p className="text-slate-400 text-base md:text-xl max-w-2xl mx-auto leading-relaxed">
-          نحن هنا للإجابة على استفساراتك الهندسية والعقارية. باب مكتبنا مفتوح دائماً لاستقبالكم.
-        </p>
-      </div>
+      {/* Hero Section لصفحة التواصل */}
+      <section className="relative pt-32 pb-20 md:pt-40 md:pb-24 text-center px-4 border-b border-white/5 overflow-hidden">
+        {/* 1. الصورة الخلفية (صورة الاجتماع والمصافحة) */}
+        <div className="absolute inset-0 bg-[url('/images/contact-hero.jpg')] bg-cover bg-center opacity-40 pointer-events-none" />
+        
+        {/* 2. التدرج اللوني (يبدأ داكناً ليتناسب مع القائمة وينتهي بلون خلفية الموقع) */}
+        <div className="absolute inset-0 bg-gradient-to-b from-slate-950/90 via-slate-950/70 to-slate-950 pointer-events-none" />
+        
+        {/* 3. باترن المكعبات لربط الهوية البصرية بباقي الصفحات */}
+        <div className="absolute inset-0 bg-[url('/images/cubes-pattern.png')] opacity-5 pointer-events-none" />
+
+        {/* 4. النصوص (تم رفعها للأعلى z-10 وإضافة ظلال لتبرز فوق الصورة) */}
+        <div className="relative z-10 max-w-4xl mx-auto">
+          <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-white mb-4 drop-shadow-lg">
+            تواصل معنا
+          </h1>
+          <p className="text-slate-300 text-base md:text-xl max-w-2xl mx-auto leading-relaxed drop-shadow-md">
+            نحن هنا للإجابة على استفساراتك الهندسية والعقارية. باب مكتبنا مفتوح دائماً لاستقبالكم.
+          </p>
+        </div>
+      </section>
 
       <Suspense fallback={
         <div className="grow flex items-center justify-center text-yellow-500 text-xl animate-pulse py-20">
