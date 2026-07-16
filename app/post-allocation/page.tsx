@@ -88,8 +88,10 @@ export default function PostAllocationPage() {
 
       {/* Hero Section */}
       <section className="relative pt-32 pb-20 md:pt-40 md:pb-24 overflow-hidden border-b border-white/5">
-        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1541888082425-eb1bbd9299ce?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center opacity-10" />
-        <div className="absolute inset-0 bg-gradient-to-b from-slate-950 via-slate-950/90 to-slate-900" />
+        {/* تم رفع الوضوح إلى opacity-40 */}
+        <div className="absolute inset-0 bg-[url('/images/contract-hero.jpg')] bg-cover bg-center opacity-40" />
+        {/* تم تقليل عتامة التدرج اللوني ليسمح للصورة بالظهور */}
+        <div className="absolute inset-0 bg-gradient-to-b from-slate-950/80 via-slate-950/70 to-slate-900/90" />
         
         <div className="relative z-10 max-w-5xl mx-auto px-4 text-center">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-yellow-500/10 border border-yellow-500/20 text-yellow-500 font-bold mb-6 animate-fade-in-up">

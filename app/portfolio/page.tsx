@@ -25,9 +25,19 @@ export default async function PortfolioPage() {
       
       <Navbar />
 
-      <section className="relative pt-24 pb-10 md:py-24 bg-slate-900 border-b border-white/5">
-        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-5 pointer-events-none"></div>
+      {/* Hero Section لمعرض الأعمال */}
+      <section className="relative pt-32 pb-20 md:pt-40 md:pb-24 overflow-hidden border-b border-white/5">
+        {/* 1. الصورة الخلفية */}
+        <div className="absolute inset-0 bg-[url('/images/portfolio-hero.jpg')] bg-cover bg-center opacity-40 pointer-events-none" />
+        
+        {/* 2. التدرج اللوني الشفاف لدمج الصورة مع لون الموقع وإبراز النصوص */}
+        <div className="absolute inset-0 bg-gradient-to-b from-slate-950/90 via-slate-950/60 to-slate-950 pointer-events-none" />
+        
+        {/* 3. باترن المكعبات المحلي (يضيف ملمساً هندسياً خفيفاً) */}
+        <div className="absolute inset-0 bg-[url('/images/cubes-pattern.png')] opacity-5 pointer-events-none" />
+
         <div className="max-w-7xl mx-auto px-4 text-center relative z-10">
+          
           <h1 className="text-3xl md:text-6xl font-bold text-white mb-4 md:mb-6">
             أعمالنا تتحدث <span className="text-yellow-500">عنا</span>
           </h1>

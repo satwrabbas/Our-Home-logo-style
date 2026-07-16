@@ -23,7 +23,7 @@ export default async function Hero() {
     <div id="home">
       <section className="relative min-h-[60vh] md:h-[80vh] flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 bg-linear-to-t from-background via-transparent to-transparent z-10" />
-        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center opacity-40" />
+        <div className="absolute inset-0 bg-[url('/images/hero-bg-1.jpg')] bg-cover bg-center opacity-40" />
 
         <div className="relative z-20 text-center max-w-4xl px-4">
           <h1 className="text-3xl sm:text-4xl md:text-7xl font-bold mb-4 md:mb-6 text-transparent bg-clip-text bg-linear-to-r from-white to-gray-400">
@@ -95,8 +95,7 @@ export default async function Hero() {
         <div
           className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat transition-transform duration-10000 hover:scale-110"
           style={{
-            backgroundImage:
-              "url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070&auto=format&fit=crop')",
+            backgroundImage: "url('/images/hero-bg-2.jpg')",
           }}
         >
           <div className="absolute inset-0 bg-slate-950/70 bg-linear-to-t from-slate-950 via-slate-950/50 to-transparent"></div>

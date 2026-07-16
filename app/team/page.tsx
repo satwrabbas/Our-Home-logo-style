@@ -26,7 +26,7 @@ export default function TeamPage() {
       role: "المدير المالي",
       icon: <FaChartLine />,
       desc: "عقلية مالية فذة تدير الأصول العقارية وتضمن الحفاظ على قيمة مدخرات المكتتبين بدلالة مواد البناء (معادل التغير السعري) لتحقيق أقصى درجات الأمان.",
-      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1974&auto=format&fit=crop", 
+      image: "/images/team-abdullah.jpg", 
       color: "text-green-500",
       bg: "bg-green-500/10",
       border: "hover:border-green-500/50",
@@ -36,7 +36,7 @@ export default function TeamPage() {
       role: "مهندسة معمارية",
       icon: <FaPencilRuler />,
       desc: "لمسات إبداعية في التصميم المعماري، تعمل على تحويل الأفكار إلى واجهات ومساحات تنبض بالحياة وتلبي تطلعات العملاء بأدق التفاصيل.",
-      image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=1976&auto=format&fit=crop", 
+      image: "/images/team-shem.jpg", 
       color: "text-blue-500",
       bg: "bg-blue-500/10",
       border: "hover:border-blue-500/50",
@@ -46,7 +46,7 @@ export default function TeamPage() {
       role: "مهندس مدني",
       icon: <FaHardHat />,
       desc: "إشراف ميداني دقيق ومتابعة صارمة لتنفيذ المخططات في الموقع، لضمان أعلى معايير الجودة والمتانة والسلامة الإنشائية لمشاريعنا.",
-      image: "https://images.unsplash.com/photo-1537368910025-700350fe46c7?q=80&w=2070&auto=format&fit=crop", 
+      image: "/images/team-murhaf.jpg", 
       color: "text-amber-500",
       bg: "bg-amber-500/10",
       border: "hover:border-amber-500/50",
@@ -56,7 +56,7 @@ export default function TeamPage() {
       role: "محاسبة",
       icon: <FaCalculator />,
       desc: "دقة متناهية في إدارة حسابات المكتتبين، متابعة الأقساط، وإصدار الكشوفات المالية الدورية لضمان الشفافية المطلقة بين المكتب وعملائه.",
-      image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=1961&auto=format&fit=crop", 
+      image: "/images/team-diala.jpg",
       color: "text-pink-500",
       bg: "bg-pink-500/10",
       border: "hover:border-pink-500/50",
@@ -73,10 +73,7 @@ export default function TeamPage() {
         {/* طبقة الصورة مع التأثير الحركي السينمائي البطيء */}
         <div 
           className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat transition-transform duration-10000 hover:scale-110"
-          style={{ 
-            // هذه هي الصورة المؤقتة لفريق العمل، يمكنك تغيير الرابط لاحقاً بصورتكم الجماعية
-            backgroundImage: "url('https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=2070&auto=format&fit=crop')" 
-          }}
+          style={{ backgroundImage: "url('/images/team-hero-bg.jpg')" }}
         >
           {/* طبقة التعتيم (الفلتر) المدمجة لحماية النص وجعله مقروءاً بوضوح */}
           <div className="absolute inset-0 bg-slate-950/70 bg-linear-to-t from-slate-950 via-slate-950/60 to-transparent"></div>
@@ -102,7 +99,7 @@ export default function TeamPage() {
           <div className="flex flex-col lg:flex-row items-center gap-10 relative z-10">
             <div className="w-56 h-56 md:w-72 md:h-72 relative shrink-0 rounded-2xl overflow-hidden border-2 border-yellow-500/50 shadow-[0_0_30px_rgba(234,179,8,0.2)]">
               <Image 
-                src="https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=1974&auto=format&fit=crop" 
+                src="/images/founder.jpg" 
                 alt="المهندس محمد كامل علي" 
                 fill 
                 className="object-cover"
@@ -181,10 +178,7 @@ export default function TeamPage() {
         {/* الخلفية المعمارية المتحركة التي تملأ الشاشة بالكامل */}
         <div
           className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat transition-transform duration-10000 hover:scale-110"
-          style={{
-            backgroundImage:
-              "url('https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=2070&auto=format&fit=crop')",
-          }}
+          style={{ backgroundImage: "url('/images/training-bg.jpg')" }}
         >
           {/* تدرج لوني داكن مائل للأزرق مع طبقة مزدوجة لحفظ وضوح الكلمات */}
           <div className="absolute inset-0 bg-slate-950/70 bg-linear-to-t from-slate-950 via-slate-950/60 to-transparent"></div>
@@ -243,7 +237,7 @@ export default function TeamPage() {
               <div className="absolute inset-0 bg-blue-500/10 mix-blend-overlay z-10 group-hover:opacity-0 transition-opacity duration-500"></div>
               <div
                 className="absolute inset-0 w-full h-full bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
-                style={{ backgroundImage: "url('https://images.unsplash.com/photo-1600880292203-757bb62b4baf?q=80&w=2070&auto=format&fit=crop')" }}
+                style={{ backgroundImage: "url('/images/training-card-1.jpg')" }}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/40 to-transparent z-10"></div>
             </div>
@@ -264,7 +258,7 @@ export default function TeamPage() {
               <div className="absolute inset-0 bg-blue-500/10 mix-blend-overlay z-10 group-hover:opacity-0 transition-opacity duration-500"></div>
               <div
                 className="absolute inset-0 w-full h-full bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
-                style={{ backgroundImage: "url('https://images.unsplash.com/photo-1541888082425-eb1bbd9299ce?q=80&w=2070&auto=format&fit=crop')" }}
+                style={{ backgroundImage: "url('/images/field-training.jpg')" }}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/40 to-transparent z-10"></div>
             </div>
@@ -285,7 +279,7 @@ export default function TeamPage() {
               <div className="absolute inset-0 bg-blue-500/10 mix-blend-overlay z-10 group-hover:opacity-0 transition-opacity duration-500"></div>
               <div
                 className="absolute inset-0 w-full h-full bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
-                style={{ backgroundImage: "url('https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=2070&auto=format&fit=crop')" }}
+              style={{ backgroundImage: "url('/images/training-card-3.jpg')" }}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/40 to-transparent z-10"></div>
             </div>
@@ -303,7 +297,7 @@ export default function TeamPage() {
         </div>
       </section>
 
-      
+
       {/* Hiring / Join Us CTA */}
       <section className="py-20 relative text-center border-t border-white/5 bg-slate-900/30">
         <div className="max-w-3xl mx-auto px-4">

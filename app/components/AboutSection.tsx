@@ -93,7 +93,7 @@ export default function AboutSection() {
           <div className="relative order-1 lg:order-2 mb-8 lg:mb-0">
             <div className="relative z-10 rounded-2xl overflow-hidden shadow-2xl border border-white/10 aspect-[4/5] w-full max-w-md mx-auto lg:max-w-none">
               <img
-                src="https://images.unsplash.com/photo-1664575602276-acd073f104c1?q=80&w=2070&auto=format&fit=crop"
+                src="/images/about-engineers.jpg"
                 alt="مهندسون في الموقع"
                 className="w-full h-full object-cover hover:scale-105 transition duration-700"
               />
